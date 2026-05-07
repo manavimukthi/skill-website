@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 import slugify from 'slugify'
+import { readDB } from '@/lib/db'
+import { ensurePublishedSkillFromSubmission } from '@/lib/submission-publish'
+import type { Submission } from '@/lib/admin-data'
 
 const createSkillSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters').max(100),
@@ -66,6 +69,27 @@ export async function GET(request: NextRequest) {
 
     const { data, error, count } = await query
     if (error) throw error
+
+    // If no skills are in Supabase yet, sync any approved submissions automatically.
+    if (!data || data.length === 0) {
+      const submissions = readDB<Submission[]>('submissions.json', [])
+      const approved = submissions.filter((s) => s.status === 'Approved')
+      if (approved.length > 0) {
+        await Promise.allSettled(
+          approved.map((s) => ensurePublishedSkillFromSubmission(s))
+        )
+        // Re-query after sync
+        const { data: synced, error: syncErr, count: syncCount } = await supabase
+          .from('skills')
+          .select('*, category:categories(id, name, slug, color)', { count: 'exact' })
+          .eq('published', true)
+          .order('created_at', { ascending: false })
+          .range(offset, offset + limit - 1)
+        if (!syncErr && synced && synced.length > 0) {
+          return NextResponse.json({ data: synced, total: syncCount ?? 0 })
+        }
+      }
+    }
 
     return NextResponse.json({ data, total: count ?? 0 })
   } catch (err) {

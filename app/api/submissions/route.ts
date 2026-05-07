@@ -27,6 +27,7 @@ export async function POST(request: NextRequest) {
       submitterEmail: body.submitterEmail || user.email || "",
       skillName: body.skillName,
       category: body.category,
+      description: body.description || undefined,
       submittedDate: new Date().toISOString().split("T")[0],
       content: body.content,
       github: body.github ?? undefined,

@@ -11,6 +11,12 @@ function useSupabaseUser() {
 
   useEffect(() => {
     let sub: { unsubscribe: () => void } | null = null;
+    let done = false;
+
+    // Ensure we never leave the navbar in an infinite loading state.
+    const timeout = setTimeout(() => {
+      if (!done) setReady(true);
+    }, 4000);
 
     async function init() {
       try {
@@ -26,6 +32,7 @@ function useSupabaseUser() {
             .single();
           setUsername(profile?.username ?? user.email?.split("@")[0] ?? null);
         }
+        done = true;
         setReady(true);
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -44,12 +51,16 @@ function useSupabaseUser() {
         );
         sub = subscription;
       } catch {
+        done = true;
         setReady(true);
       }
     }
 
     init();
-    return () => { sub?.unsubscribe(); };
+    return () => {
+      clearTimeout(timeout);
+      sub?.unsubscribe();
+    };
   }, []);
 
   return { username, ready };
@@ -150,11 +161,11 @@ export default function Navbar() {
                 {dropdownOpen && (
                   <div className="absolute right-0 top-full mt-0 w-44 bg-card border-2 border-text shadow-brutal z-50">
                     <Link
-                      href="/api/auth/me"
+                      href="/submit"
                       onClick={() => setDropdownOpen(false)}
                       className="block font-mono text-[10px] uppercase tracking-widest px-4 py-3 text-muted hover:text-text hover:bg-bg border-b border-border transition-colors"
                     >
-                      My Profile
+                      Submit a Skill
                     </Link>
                     <Link
                       href="/skills"

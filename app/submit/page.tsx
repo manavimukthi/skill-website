@@ -53,6 +53,7 @@ export default function SubmitPage() {
             submitterEmail: form.authorEmail,
             skillName: form.name,
             category: form.category,
+            description: form.description,
             content: form.promptContent,
             github: form.github,
           }),

@@ -33,7 +33,7 @@ export async function ensurePublishedSkillFromSubmission(submission: Submission)
     .from("skills")
     .insert({
       title: submission.skillName,
-      description: submission.content.slice(0, 500),
+      description: submission.description || submission.content.slice(0, 500),
       content: submission.content,
       category_id: categoryId,
       author_id: submission.submitterId ?? null,

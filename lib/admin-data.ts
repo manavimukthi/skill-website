@@ -19,6 +19,7 @@ export type Submission = {
   submitterId?: string;
   skillName: string;
   category: string;
+  description?: string;
   submittedDate: string;
   content: string;
   github?: string;
