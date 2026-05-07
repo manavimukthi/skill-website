@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export default function SignupPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get("returnTo") ?? searchParams.get("redirect") ?? "/";
   const [form, setForm] = useState({ email: "", password: "", username: "", display_name: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -35,7 +37,7 @@ export default function SignupPage() {
         return;
       }
 
-      router.push("/skills");
+      router.push(returnTo);
       router.refresh();
     } catch {
       setError("Something went wrong. Please try again.");
@@ -102,7 +104,10 @@ export default function SignupPage() {
 
           <p className="font-mono text-[10px] text-muted uppercase tracking-widest mt-6">
             HAVE AN ACCOUNT?{" "}
-            <Link href="/login" className="text-text hover:underline underline-offset-4">
+            <Link
+              href={`/login${returnTo !== "/" ? `?returnTo=${encodeURIComponent(returnTo)}` : ""}`}
+              className="text-text hover:underline underline-offset-4"
+            >
               SIGN IN →
             </Link>
           </p>

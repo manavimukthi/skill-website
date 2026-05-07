@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get("returnTo") ?? searchParams.get("redirect") ?? "/";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -31,7 +33,7 @@ export default function LoginPage() {
         return;
       }
 
-      router.push("/skills");
+      router.push(returnTo);
       router.refresh();
     } catch {
       setError("Something went wrong. Please try again.");
@@ -102,7 +104,10 @@ export default function LoginPage() {
 
           <p className="font-mono text-[10px] text-muted uppercase tracking-widest mt-6">
             NO ACCOUNT?{" "}
-            <Link href="/signup" className="text-text hover:underline underline-offset-4">
+            <Link
+              href={`/signup${returnTo !== "/" ? `?returnTo=${encodeURIComponent(returnTo)}` : ""}`}
+              className="text-text hover:underline underline-offset-4"
+            >
               SIGN UP FREE →
             </Link>
           </p>

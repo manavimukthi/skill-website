@@ -267,7 +267,7 @@ export default function SubmitPage() {
                 <div className="text-center">
                   <p className="font-dm text-sm text-muted mb-3">You must be signed in to submit a skill.</p>
                   <div className="flex gap-3 justify-center">
-                    <a href="/login" className="font-dm text-sm font-semibold border px-4 py-2 rounded-md">Log in</a>
+                    <a href="/login?returnTo=/submit" className="font-dm text-sm font-semibold border px-4 py-2 rounded-md">Log in</a>
                     <a href="/signup?returnTo=/submit" className="font-dm text-sm font-semibold bg-accent text-white px-4 py-2 rounded-md">Sign up</a>
                   </div>
                 </div>

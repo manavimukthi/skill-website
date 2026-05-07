@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
 import Logo from "./Logo";
 
@@ -74,6 +75,10 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { username, ready } = useSupabaseUser();
+  const pathname = usePathname();
+  const signInHref = ["/login", "/signup"].includes(pathname)
+    ? "/login"
+    : `/login?returnTo=${encodeURIComponent(pathname)}`;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -185,7 +190,7 @@ export default function Navbar() {
               </div>
             ) : ready ? (
               <Link
-                href="/login"
+                href={signInHref}
                 className="font-mono text-[11px] uppercase tracking-widest bg-text text-bg px-4 py-2.5 border-2 border-text hover:bg-mustard hover:border-mustard hover:text-text transition-colors duration-100"
               >
                 Sign In
@@ -256,7 +261,7 @@ export default function Navbar() {
                 </div>
               ) : ready ? (
                 <Link
-                  href="/login"
+                  href={signInHref}
                   onClick={() => setMobileMenuOpen(false)}
                   className="block font-mono text-[12px] uppercase tracking-widest bg-text text-bg px-4 py-3 border-2 border-text text-center hover:bg-mustard hover:border-mustard hover:text-text transition-colors duration-100"
                 >

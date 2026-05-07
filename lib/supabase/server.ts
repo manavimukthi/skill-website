@@ -14,6 +14,8 @@ export function createClient() {
 
   const cookieStore = cookies()
 
+  const SESSION_MAX_AGE = 14 * 24 * 60 * 60 // 14 days in seconds
+
   return createServerClient(url, key, {
     cookies: {
       getAll() {
@@ -22,7 +24,7 @@ export function createClient() {
       setAll(cookiesToSet) {
         try {
           cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
+            cookieStore.set(name, value, { ...options, maxAge: SESSION_MAX_AGE })
           )
         } catch {
           // Server Component context — cookies are read-only here

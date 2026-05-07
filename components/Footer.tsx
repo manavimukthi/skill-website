@@ -9,26 +9,22 @@ const COLS = [
     links: [
       { label: "Browse Skills", href: "/skills" },
       { label: "Submit a Skill", href: "/submit" },
-      { label: "Build a Skill", href: "#" },
-      { label: "API", href: "#" },
+      { label: "Build a Skill", href: "/docs" },
     ],
   },
   {
     heading: "RESOURCES",
     links: [
-      { label: "Docs", href: "#" },
-      { label: "Blog", href: "#" },
-      { label: "Changelog", href: "#" },
-      { label: "GitHub", href: "#" },
+      { label: "Docs", href: "/docs" },
+      { label: "Blog", href: "/blog" },
+      { label: "Changelog", href: "/changelog" },
     ],
   },
   {
     heading: "COMMUNITY",
     links: [
-      { label: "Discord", href: "#" },
-      { label: "Twitter", href: "#" },
-      { label: "Newsletter", href: "#" },
-      { label: "Contact", href: "#" },
+      { label: "Discord", href: "/contact" },
+      { label: "Contact", href: "/contact" },
     ],
   },
 ];
