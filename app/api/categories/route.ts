@@ -1,0 +1,20 @@
+import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
+
+export async function GET() {
+  try {
+    const supabase = createClient()
+
+    const { data, error } = await supabase
+      .from('categories')
+      .select('*')
+      .order('sort_order', { ascending: true })
+
+    if (error) throw error
+
+    return NextResponse.json({ data })
+  } catch (err) {
+    console.error('/api/categories GET', err)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}

@@ -1,0 +1,68 @@
+[
+  {
+    "id": "a1778132998059",
+    "type": "approval",
+    "description": "\"Cold Email Generator\" was approved and published",
+    "timestamp": "just now"
+  },
+  {
+    "id": "a1778079300765",
+    "type": "approval",
+    "description": "\"Cold Email Generator\" was approved and published",
+    "timestamp": "just now"
+  },
+  {
+    "id": "a1778075062056",
+    "type": "approval",
+    "description": "\"Cold Email Generator\" was approved and published",
+    "timestamp": "just now"
+  },
+  {
+    "id": "a1",
+    "type": "submission",
+    "description": "Alex Rivera submitted \"YouTube Script Writer\"",
+    "timestamp": "2 hours ago"
+  },
+  {
+    "id": "a2",
+    "type": "subscriber",
+    "description": "New subscriber: developer@startup.io",
+    "timestamp": "3 hours ago"
+  },
+  {
+    "id": "a3",
+    "type": "approval",
+    "description": "\"Grant Proposal Writer\" was approved and published",
+    "timestamp": "5 hours ago"
+  },
+  {
+    "id": "a4",
+    "type": "submission",
+    "description": "Nina Patel submitted \"Competitive Analysis Report\"",
+    "timestamp": "6 hours ago"
+  },
+  {
+    "id": "a5",
+    "type": "subscriber",
+    "description": "New subscriber: creator@agency.co",
+    "timestamp": "8 hours ago"
+  },
+  {
+    "id": "a6",
+    "type": "rejection",
+    "description": "\"Spam Email Filter\" was rejected (TOS violation)",
+    "timestamp": "1 day ago"
+  },
+  {
+    "id": "a7",
+    "type": "approval",
+    "description": "\"Twitter Thread Crafter\" reached 8,000 downloads",
+    "timestamp": "1 day ago"
+  },
+  {
+    "id": "a8",
+    "type": "submission",
+    "description": "Marcus Chen submitted \"LinkedIn Outreach Generator\"",
+    "timestamp": "2 days ago"
+  }
+]

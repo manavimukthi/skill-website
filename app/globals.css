@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --color-bg:      244 241 234;
+  --color-card:    255 255 255;
+  --color-border:   26  26  26;
+  --color-text:     26  26  26;
+  --color-muted:   138 133 122;
+  --color-tagBg:   244 241 234;
+  --color-tagText: 138 133 122;
+}
+
+.dark {
+  color-scheme: dark;
+  --color-bg:       20  18  16;
+  --color-card:     31  28  24;
+  --color-border:  244 241 234;
+  --color-text:    244 241 234;
+  --color-muted:   138 133 122;
+  --color-tagBg:    31  28  24;
+  --color-tagText: 201 168 130;
+}
+
+body {
+  color: rgb(var(--color-text));
+  background: rgb(var(--color-bg));
+}
+
+/* Brutalist card hover — used across editorial cards */
+.card-brutal {
+  transition: transform 100ms linear, box-shadow 100ms linear;
+}
+.card-brutal:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 5px 5px 0 rgb(var(--color-text));
+}
+
+/* Section divider line */
+.section-divider {
+  border-top: 2px solid rgb(var(--color-border));
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .tracking-editorial { letter-spacing: -0.02em; }
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }

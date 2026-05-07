@@ -1,0 +1,44 @@
+[
+  {
+    "id": "post1",
+    "slug": "getting-started-with-claude-skills",
+    "title": "Getting Started with Claude Skills",
+    "excerpt": "Learn how to install and use Claude skills to supercharge your AI workflows.",
+    "content": "# Getting Started with Claude Skills\n\nClaude skills are reusable prompt templates that help you get consistent, high-quality results from Claude AI. Whether you're writing emails, debugging code, or drafting marketing copy — there's a skill for that.\n\n## What are Skills?\n\nSkills are carefully crafted system prompts that transform Claude into a specialized assistant for a specific task. Think of them as job descriptions you hand to Claude at the start of a conversation.\n\n## How to Use a Skill\n\n1. Browse the skill library and find one that fits your needs.\n2. Click **Download** to get the `.md` skill file.\n3. In your Claude project, paste the content as the system prompt.\n4. Start chatting — Claude will now behave as that specialist.\n\n## Tips for Best Results\n\n- Be specific in your follow-up messages.\n- Provide examples or context when relevant.\n- Combine multiple skills into a single system prompt for power workflows.\n- Iterate and refine based on Claude's responses.",
+    "author": "SkillForge Team",
+    "coverBg": "#D6E4F0",
+    "tags": ["tutorial", "getting-started"],
+    "status": "Published",
+    "publishedAt": "2025-01-15T10:00:00Z",
+    "createdAt": "2025-01-15T10:00:00Z",
+    "updatedAt": "2025-01-15T10:00:00Z"
+  },
+  {
+    "id": "post2",
+    "slug": "top-10-skills-for-developers",
+    "title": "Top 10 Skills for Developers",
+    "excerpt": "Discover the most downloaded Claude skills that developers use every day to write, review, and ship code faster.",
+    "content": "# Top 10 Skills for Developers\n\nClaude has become an indispensable tool for developers worldwide. Here are the top 10 skills our community downloads most.\n\n## 1. Code Reviewer\n\nGet professional code reviews with actionable feedback on readability, performance, and security.\n\n## 2. Bug Hunter\n\nSystematically identify and diagnose bugs in your codebase with clear explanations.\n\n## 3. Documentation Writer\n\nAuto-generate clean, comprehensive documentation from your code or API specs.\n\n## 4. Git Commit Crafter\n\nWrite meaningful, conventional commit messages every time.\n\n## 5. Regex Builder\n\nDescribe what you need to match and get a battle-tested regex pattern with explanation.\n\n## 6. SQL Query Optimizer\n\nPaste slow queries and get optimized rewrites with explanations.\n\n## 7. Unit Test Generator\n\nGenerate full test suites for your functions in any testing framework.\n\n## 8. Architecture Advisor\n\nGet senior-engineer-level advice on system design and architecture decisions.\n\n## 9. API Designer\n\nDesign RESTful APIs with proper resource naming, status codes, and response shapes.\n\n## 10. Refactor Coach\n\nRefactor messy code into clean, idiomatic patterns step by step.",
+    "author": "SkillForge Team",
+    "coverBg": "#D0F0C0",
+    "tags": ["coding", "developer-tools", "list"],
+    "status": "Published",
+    "publishedAt": "2025-02-01T10:00:00Z",
+    "createdAt": "2025-02-01T10:00:00Z",
+    "updatedAt": "2025-02-01T10:00:00Z"
+  },
+  {
+    "id": "post3",
+    "slug": "how-to-write-great-skill-prompts",
+    "title": "How to Write Great Skill Prompts",
+    "excerpt": "A practical guide to writing Claude skill prompts that produce reliable, high-quality output every time.",
+    "content": "# How to Write Great Skill Prompts\n\nThe quality of a Claude skill lives or dies by the quality of its system prompt. Here's how to write ones that work reliably.\n\n## Start with a Role\n\nAlways open with a clear role definition: *\"You are a professional copywriter specializing in B2B SaaS landing pages.\"* This sets tone, vocabulary, and decision-making style.\n\n## Define the Output Format\n\nSpecify exactly what you want back. Should Claude use bullet points? A specific word count? JSON? The more concrete, the better.\n\n## Add Constraints\n\nConstraints prevent Claude from going off-script. Examples:\n- *Do not add disclaimers or caveats.*\n- *Always respond in the same language as the user.*\n- *Never exceed 200 words.*\n\n## Include Examples\n\nFew-shot examples are the single biggest quality lever. Add 1–3 examples of ideal input/output pairs inside the system prompt.\n\n## Test and Iterate\n\nRun at least 10 diverse test cases before publishing. Edge cases reveal prompt weaknesses that happy-path testing misses.",
+    "author": "SkillForge Team",
+    "coverBg": "#FFF3CD",
+    "tags": ["tutorial", "prompt-engineering"],
+    "status": "Draft",
+    "publishedAt": null,
+    "createdAt": "2025-03-10T09:00:00Z",
+    "updatedAt": "2025-03-10T09:00:00Z"
+  }
+]
