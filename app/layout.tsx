@@ -29,6 +29,14 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "SkillForge — Free Claude AI Skills Library",
   description: "Discover, download, and build free Claude AI skills. Join 2,400+ builders.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico?v=20260508", type: "image/x-icon" },
+      { url: "/favicon.svg?v=20260508", type: "image/svg+xml" },
+    ],
+    apple: "/favicon.ico?v=20260508",
+    shortcut: "/favicon.ico?v=20260508",
+  },
 };
 
 const MAINTENANCE_BYPASS = ["/maintenance", "/admin", "/api/"];
