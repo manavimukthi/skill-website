@@ -31,11 +31,11 @@ export const metadata: Metadata = {
   description: "Discover, download, and build free Claude AI skills. Join 2,400+ builders.",
   icons: {
     icon: [
-      { url: "/favicon.ico?v=20260508", type: "image/x-icon" },
-      { url: "/favicon.svg?v=20260508", type: "image/svg+xml" },
+      { url: "/favicon.ico", type: "image/x-icon" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
     ],
-    apple: "/favicon.ico?v=20260508",
-    shortcut: "/favicon.ico?v=20260508",
+    apple: "/favicon.ico",
+    shortcut: "/favicon.ico",
   },
 };
 
@@ -55,10 +55,6 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.ico?v=20260508" sizes="any" />
-        <link rel="icon" href="/favicon.svg?v=20260508" type="image/svg+xml" />
-        <link rel="shortcut icon" href="/favicon.ico?v=20260508" />
-        <link rel="apple-touch-icon" href="/favicon.ico?v=20260508" />
         <script
           dangerouslySetInnerHTML={{
             __html: `try{const t=localStorage.getItem('sf_theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}`,
