@@ -11,29 +11,43 @@ export default function SkillsPage() {
   const [selected, setSelected] = useState("All");
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
+  const [skillsPerPage, setSkillsPerPage] = useState(16);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    async function fetchSkills() {
+    async function init() {
       try {
-        const res = await fetch("/api/skills?limit=100");
-        if (!res.ok) throw new Error("Failed to fetch");
-        const { data } = await res.json();
-        if (Array.isArray(data)) {
-          setSkills(data.map(dbSkillToSkill));
+        const [skillsRes, settingsRes] = await Promise.all([
+          fetch("/api/skills?limit=500"),
+          fetch("/api/admin/settings"),
+        ]);
+        if (skillsRes.ok) {
+          const { data } = await skillsRes.json();
+          if (Array.isArray(data)) setSkills(data.map(dbSkillToSkill));
+        }
+        if (settingsRes.ok) {
+          const { data } = await settingsRes.json();
+          if (data?.skillsPerPage) setSkillsPerPage(data.skillsPerPage);
         }
       } catch {
-        // Leave the grid empty if Supabase is unavailable.
+        // Leave the grid empty if unavailable.
       } finally {
         setLoading(false);
       }
     }
-    fetchSkills();
+    init();
   }, []);
+
+  // Reset to page 1 when filter changes
+  useEffect(() => { setPage(1); }, [selected]);
 
   const filtered =
     selected === "All"
       ? skills
       : skills.filter((s) => s.category === selected);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / skillsPerPage));
+  const paginated = filtered.slice((page - 1) * skillsPerPage, page * skillsPerPage);
 
   return (
     <>
@@ -53,7 +67,42 @@ export default function SkillsPage() {
             )}
           </p>
         </div>
-        <SkillsGrid skills={filtered} />
+
+        <SkillsGrid skills={paginated} />
+
+        {!loading && totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-10">
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="font-dm text-sm px-4 py-2 border border-border rounded-md hover:border-accent hover:text-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors text-text"
+            >
+              ← Prev
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <button
+                key={p}
+                onClick={() => setPage(p)}
+                className={`font-dm text-sm w-9 h-9 rounded-md border transition-colors ${
+                  p === page
+                    ? "bg-accent text-white border-accent"
+                    : "border-border text-text hover:border-accent hover:text-accent"
+                }`}
+              >
+                {p}
+              </button>
+            ))}
+
+            <button
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages}
+              className="font-dm text-sm px-4 py-2 border border-border rounded-md hover:border-accent hover:text-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors text-text"
+            >
+              Next →
+            </button>
+          </div>
+        )}
       </main>
       <Footer />
     </>

@@ -1,7 +1,7 @@
 {
   "siteName": "Tryskill",
   "siteDescription": "The best free Claude AI skills on the internet.",
-  "skillsPerPage": 16,
+  "skillsPerPage": 10,
   "maintenanceMode": false,
   "adsense": {
     "publisherId": "pub-0000000000000000",
