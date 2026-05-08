@@ -30,12 +30,8 @@ export const metadata: Metadata = {
   title: "SkillForge — Free Claude AI Skills Library",
   description: "Discover, download, and build free Claude AI skills. Join 2,400+ builders.",
   icons: {
-    icon: [
-      { url: "/favicon.ico", type: "image/x-icon" },
-      { url: "/favicon.svg", type: "image/svg+xml" },
-    ],
-    apple: "/favicon.ico",
-    shortcut: "/favicon.ico",
+    icon: { url: "/favicon.svg", type: "image/svg+xml" },
+    shortcut: "/favicon.svg",
   },
 };
 
