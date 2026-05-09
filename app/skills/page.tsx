@@ -38,7 +38,7 @@ export default function SkillsPage() {
         }
 
         // Fetch settings regardless of whether we searched or loaded full list
-        const settingsRes = await fetch("/api/admin/settings");
+        const settingsRes = await fetch("/api/admin/settings", { cache: "no-store" });
         if (settingsRes.ok) {
           const { data } = await settingsRes.json();
           if (data?.skillsPerPage) setSkillsPerPage(data.skillsPerPage);

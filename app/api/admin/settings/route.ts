@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { readDB, writeDB } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 const DEFAULT_SETTINGS = {
   siteName: "SkillForge",
   siteDescription: "The best free Claude AI skills on the internet.",
@@ -22,7 +24,10 @@ const DEFAULT_SETTINGS = {
 
 export async function GET() {
   const settings = readDB("settings.json", DEFAULT_SETTINGS);
-  return NextResponse.json({ data: settings });
+  return NextResponse.json(
+    { data: settings },
+    { headers: { "Cache-Control": "no-store" } }
+  );
 }
 
 export async function PUT(request: NextRequest) {

@@ -55,11 +55,14 @@ const DEFAULT: Settings = {
 };
 
 async function saveSettings(patch: Partial<Settings>) {
-  await fetch("/api/admin/settings", {
+  const response = await fetch("/api/admin/settings", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(patch),
   });
+  if (!response.ok) {
+    throw new Error("Failed to save settings");
+  }
 }
 
 function GeneralTab({ settings, onChange }: { settings: Settings; onChange: (s: Settings) => void }) {
@@ -69,9 +72,19 @@ function GeneralTab({ settings, onChange }: { settings: Settings; onChange: (s: 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    await saveSettings({ siteName: settings.siteName, siteDescription: settings.siteDescription, skillsPerPage: settings.skillsPerPage, maintenanceMode: settings.maintenanceMode });
-    setLoading(false);
-    addToast("General settings saved");
+    try {
+      await saveSettings({
+        siteName: settings.siteName,
+        siteDescription: settings.siteDescription,
+        skillsPerPage: settings.skillsPerPage,
+        maintenanceMode: settings.maintenanceMode,
+      });
+      addToast("General settings saved");
+    } catch {
+      addToast("Failed to save general settings", "error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -250,7 +263,7 @@ export default function SettingsPage() {
   const TABS: Tab[] = ["General", "AdSense", "API", "Notifications"];
 
   useEffect(() => {
-    fetch("/api/admin/settings")
+    fetch("/api/admin/settings", { cache: "no-store" })
       .then((r) => r.json())
       .then(({ data }) => { if (data) setSettings(data); })
       .catch(() => addToast("Failed to load settings", "error"))
