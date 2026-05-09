@@ -28,8 +28,8 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 const STORAGE_KEY = "sf_admin_auth";
-const ADMIN_EMAIL = "admin@skillforge.com";
-const ADMIN_PASSWORD = "admin123";
+const ADMIN_EMAIL = "suport@ceyliz.tech";
+const ADMIN_PASSWORD = "indu@#3111";
 
 export function AdminAuthProvider({ children }: { children: ReactNode }) {
   const [auth, setAuth] = useState<AuthState>({
