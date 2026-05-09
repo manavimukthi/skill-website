@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
         .from('skills')
         .select('*, category:categories(id, name, slug, color)')
         .eq('published', true)
-        .or(`title.ilike.%${q}%,description.ilike.%${q}%`)
+        .or(`title.ilike.%${q}%,description.ilike.%${q}%,tags::text.ilike.%${q}%`)
         .order('download_count', { ascending: false })
         .limit(20)
 

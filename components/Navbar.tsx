@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
@@ -73,7 +74,11 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const router = useRouter();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
   const { username, ready } = useSupabaseUser();
   const pathname = usePathname();
   const signInHref = ["/login", "/signup"].includes(pathname)
@@ -91,10 +96,30 @@ export default function Navbar() {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setDropdownOpen(false);
       }
+      // close search when clicking outside
+      if (
+        showSearch &&
+        searchInputRef.current &&
+        !searchInputRef.current.contains(e.target as Node)
+      ) {
+        setShowSearch(false);
+      }
     }
     document.addEventListener("mousedown", onClickOutside);
     return () => document.removeEventListener("mousedown", onClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (showSearch) searchInputRef.current?.focus();
+  }, [showSearch]);
+
+  function submitSearch(q?: string) {
+    const query = (q ?? searchQuery).trim();
+    if (!query) return;
+    setShowSearch(false);
+    setSearchQuery("");
+    router.push(`/skills?q=${encodeURIComponent(query)}`);
+  }
 
   // Close mobile menu on route change / resize
   useEffect(() => {
@@ -138,15 +163,34 @@ export default function Navbar() {
         {/* Right actions */}
         <div className="flex items-center gap-2 sm:gap-3">
           <ThemeToggle />
-          <button
-            aria-label="Search"
-            className="p-2 text-muted hover:text-text transition-colors duration-100"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-          </button>
+          <div className="relative">
+            <button
+              aria-label="Search"
+              onClick={() => setShowSearch((v) => !v)}
+              className="p-2 text-muted hover:text-text transition-colors duration-100"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </button>
+
+            {showSearch && (
+              <form
+                onSubmit={(e) => { e.preventDefault(); submitSearch(); }}
+                className="absolute right-0 mt-2 w-[260px]"
+              >
+                <input
+                  ref={searchInputRef}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search skills or tags"
+                  aria-label="Search skills or tags"
+                  className="w-full px-3 py-2 rounded border border-border bg-card text-text placeholder:text-muted"
+                />
+              </form>
+            )}
+          </div>
 
           {/* Auth area — desktop only */}
           <div className="hidden md:flex items-center">

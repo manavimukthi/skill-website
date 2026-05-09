@@ -4,15 +4,51 @@ import { useState } from "react";
 
 const CATEGORIES = ["Writing", "Coding", "Marketing", "Research", "Automation", "Business"];
 const STYLES = ["Professional", "Casual", "Punchy", "Academic"];
+const WEBHOOK_URL = "https://n8n.n8yland.me/webhook/skill";
 
 export default function TryItBuilder() {
   const [category, setCategory] = useState("Writing");
   const [style, setStyle] = useState("Professional");
   const [prompt, setPrompt] = useState("");
   const [generated, setGenerated] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!prompt.trim() || loading) return;
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          category,
+          style,
+          prompt: prompt.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      setGenerated(true);
+    } catch {
+      setError("Could not reach the webhook right now. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="border-2 border-text bg-card">
+    <form onSubmit={handleSubmit} className="border-2 border-text bg-card">
       <div className="grid grid-cols-1 md:grid-cols-3 divide-y-2 md:divide-y-0 md:divide-x-2 divide-text">
         {/* 01 INPUT */}
         <div className="p-4 sm:p-8">
@@ -82,16 +118,18 @@ export default function TryItBuilder() {
 
       {/* Generate button */}
       <div className="border-t-2 border-text p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p className="font-mono text-xs text-muted text-center sm:text-left">
-          100% FREE · NO SIGNUP · INSTANT DEPLOY
-        </p>
+        <div className="flex flex-col gap-2 text-center sm:text-left">
+          <p className="font-mono text-xs text-muted">100% FREE · NO SIGNUP · INSTANT DEPLOY</p>
+          {error ? <p className="font-mono text-[11px] text-[#C8553D] uppercase tracking-widest">{error}</p> : null}
+        </div>
         <button
-          onClick={() => setGenerated(true)}
-          className="font-mono text-sm uppercase tracking-widest bg-text text-bg px-8 sm:px-10 py-3.5 sm:py-4 border-2 border-text hover:bg-mustard hover:text-text hover:border-mustard transition-colors duration-100 w-full sm:w-auto"
+          type="submit"
+          disabled={loading}
+          className="font-mono text-sm uppercase tracking-widest bg-text text-bg px-8 sm:px-10 py-3.5 sm:py-4 border-2 border-text hover:bg-mustard hover:text-text hover:border-mustard transition-colors duration-100 w-full sm:w-auto disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          Generate →
+          {loading ? "Sending..." : "Generate →"}
         </button>
       </div>
-    </div>
+    </form>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import FilterBar from "@/components/FilterBar";
 import SkillsGrid from "@/components/SkillsGrid";
@@ -13,18 +14,31 @@ export default function SkillsPage() {
   const [loading, setLoading] = useState(true);
   const [skillsPerPage, setSkillsPerPage] = useState(16);
   const [page, setPage] = useState(1);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     async function init() {
       try {
-        const [skillsRes, settingsRes] = await Promise.all([
-          fetch("/api/skills?limit=500"),
-          fetch("/api/admin/settings"),
-        ]);
-        if (skillsRes.ok) {
-          const { data } = await skillsRes.json();
-          if (Array.isArray(data)) setSkills(data.map(dbSkillToSkill));
+        // If a search query is present in the URL, use the search API
+        const q = searchParams.get("q")?.trim();
+        if (q && q.length >= 2) {
+          const r = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+          if (r.ok) {
+            const json = await r.json();
+            if (Array.isArray(json.data)) {
+              setSkills(json.data.map(dbSkillToSkill));
+            }
+          }
+        } else {
+          const skillsRes = await fetch("/api/skills?limit=500");
+          if (skillsRes.ok) {
+            const { data } = await skillsRes.json();
+            if (Array.isArray(data)) setSkills(data.map(dbSkillToSkill));
+          }
         }
+
+        // Fetch settings regardless of whether we searched or loaded full list
+        const settingsRes = await fetch("/api/admin/settings");
         if (settingsRes.ok) {
           const { data } = await settingsRes.json();
           if (data?.skillsPerPage) setSkillsPerPage(data.skillsPerPage);
@@ -36,7 +50,7 @@ export default function SkillsPage() {
       }
     }
     init();
-  }, []);
+  }, [searchParams]);
 
   // Reset to page 1 when filter changes
   useEffect(() => { setPage(1); }, [selected]);

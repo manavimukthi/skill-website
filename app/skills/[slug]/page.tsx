@@ -171,12 +171,13 @@ export default function SkillPage() {
                       </span>
                     )}
                     {tags.map((tag) => (
-                      <span
+                      <Link
                         key={tag}
-                        className="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 bg-tagBg text-tagText"
+                        href={`/skills?q=${encodeURIComponent(tag)}`}
+                        className="font-mono text-[10px] uppercase tracking-widest px-2.5 py-1 bg-tagBg text-tagText hover:underline"
                       >
                         {tag}
-                      </span>
+                      </Link>
                     ))}
                   </div>
 
