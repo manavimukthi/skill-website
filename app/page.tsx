@@ -9,7 +9,7 @@ import TryItBuilder from "@/components/TryItBuilder";
 import { dbSkillToSkill, type Skill } from "@/lib/skills";
 
 export const metadata: Metadata = {
-  title: "Free Claude Skills Library — 940+ Skills | SkillForge",
+  title: "SkillForge — Free Claude AI Skills Library | 940+ Free Skills",
   description:
     "SkillForge is the #1 free Claude AI skills library. Download 940+ community-built Claude skills for writing, coding, marketing, research & automation. No signup required.",
   alternates: { canonical: "https://www.tryskill.me" },
@@ -196,19 +196,12 @@ export default async function HomePage() {
                 <SectionLabel n="01" label="A Free Community Library" className="mb-6" />
                 <h1 className="font-display uppercase tracking-editorial leading-[0.92] text-text mb-6" style={{ fontSize: "clamp(40px, 8vw, 96px)" }}>
                   FREE CLAUDE<br />
-                  SKILLS —<br />
-                  <span style={{ color: "#C8553D" }}>BUILT BY THE<br />COMMUNITY.</span>
+                  SKILLS.<br />
+                  <span style={{ color: "#C8553D" }}>RIGHT HERE.</span>
                 </h1>
-                <p className="font-dm text-base text-muted leading-relaxed max-w-[480px] mb-4">
+                <p className="font-dm text-base text-muted leading-relaxed max-w-[480px] mb-10">
                   Discover, share, and deploy Claude AI skills built by the community.
                   From writing to automation — all free, all open, all yours.
-                </p>
-                <p className="font-dm text-sm text-muted leading-relaxed max-w-[480px] mb-10">
-                  A <strong className="text-text">Claude skill</strong> is a reusable system prompt that
-                  transforms Claude AI into a specialist — a copywriter, code reviewer, research
-                  analyst, or any expert you need. Browse 940+ free skills, download in one click,
-                  and paste into Claude to get expert-level results instantly. No signup, no cost,
-                  no plugins. Just skills that work.
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <a

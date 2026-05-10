@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.tryskill.me"),
 
   title: {
-    default: "Free Claude Skills Library — 940+ Skills | SkillForge",
+    default: "SkillForge — Free Claude AI Skills Library | 940+ Free Skills",
     template: "%s | SkillForge",
   },
   description:
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://www.tryskill.me",
     siteName: "SkillForge",
-    title: "Free Claude Skills Library — 940+ Skills | SkillForge",
+    title: "SkillForge — Free Claude AI Skills Library | 940+ Free Skills",
     description:
       "Discover, download, and build free Claude AI skills. Browse 940+ community skills for writing, coding, marketing & more. 100% free.",
     images: [
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Free Claude Skills Library — 940+ Skills | SkillForge",
+    title: "SkillForge — Free Claude AI Skills Library | 940+ Free Skills",
     description:
       "Discover, download, and build free Claude AI skills. Browse 940+ community skills. 100% free.",
     images: ["/og-image.png"],
