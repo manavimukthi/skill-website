@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SectionLabel from "@/components/SectionLabel";
@@ -6,6 +7,124 @@ import SkillCard from "@/components/SkillCard";
 import NewsletterForm from "@/components/NewsletterForm";
 import TryItBuilder from "@/components/TryItBuilder";
 import { dbSkillToSkill, type Skill } from "@/lib/skills";
+
+export const metadata: Metadata = {
+  title: "Free Claude Skills Library — 940+ Skills | SkillForge",
+  description:
+    "SkillForge is the #1 free Claude AI skills library. Download 940+ community-built Claude skills for writing, coding, marketing, research & automation. No signup required.",
+  alternates: { canonical: "https://www.tryskill.me" },
+  openGraph: {
+    url: "https://www.tryskill.me",
+    title: "Free Claude Skills Library — 940+ Skills | SkillForge",
+    description:
+      "The #1 free Claude AI skills library. 940+ community-built skills. No signup required.",
+  },
+};
+
+const JSONLD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://www.tryskill.me/#website",
+      url: "https://www.tryskill.me",
+      name: "SkillForge",
+      description: "Free Claude AI Skills Library — community-built system prompts for Claude",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: "https://www.tryskill.me/skills?q={search_term_string}",
+        },
+        "query-input": "required name=search_term_string",
+      },
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.tryskill.me/#organization",
+      name: "SkillForge",
+      url: "https://www.tryskill.me",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.tryskill.me/logo-dark.svg",
+        width: 200,
+        height: 60,
+      },
+      sameAs: [],
+    },
+    {
+      "@type": "CollectionPage",
+      "@id": "https://www.tryskill.me/#collection",
+      url: "https://www.tryskill.me",
+      name: "Free Claude AI Skills Library",
+      description:
+        "940+ free Claude AI skills built by the community. Browse writing, coding, marketing, research, automation, and business skills.",
+      numberOfItems: 940,
+      publisher: { "@id": "https://www.tryskill.me/#organization" },
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "What is a Claude skill?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "A Claude skill is a reusable system prompt (.md file) that transforms Claude AI into a specialized expert for a specific task — like a copywriter, code reviewer, or research analyst. You download the file, paste it into Claude's system prompt field, and Claude instantly behaves as that specialist. No coding or API access required.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Are Claude skills free?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes — all Claude skills on SkillForge are 100% free to download, use, and share. No subscription, no account required to browse or download. SkillForge is a community library maintained by builders who share their skills openly.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "How do I install a Claude skill?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "To use a Claude skill: (1) Download the .md file from SkillForge. (2) Open Claude at claude.ai and create a new Project, or start a new conversation. (3) In Project settings, paste the skill content into the 'Custom instructions' field. For a regular chat, paste it at the start of your first message. (4) Start chatting — Claude will now behave as the specialist defined by the skill.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Can I build my own Claude skill?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Absolutely. SkillForge has a built-in skill builder you can use right on the homepage — no signup required. You can also read the docs for a complete guide on writing effective Claude skills. Once you've built a skill, you can submit it to the library to share with 2,400+ builders.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "What categories of Claude skills are available?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "SkillForge organizes Claude skills into six main categories: Writing (blog posts, emails, copywriting), Coding (code review, debugging, documentation), Marketing (ads, social media, SEO), Research (analysis, summarization, fact-checking), Automation (workflows, data processing), and Business (strategy, reports, presentations).",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "How is a Claude skill different from a ChatGPT Custom GPT?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Claude skills are plain Markdown system prompts that work with Claude AI, while Custom GPTs are packaged assistants built on ChatGPT with a custom UI, knowledge files, and optional API actions. Claude skills are simpler, more portable, and require no GPT Builder account — you can use them in any Claude interface immediately.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Do I need a Claude account to use skills?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "You need a Claude account at claude.ai to use the skills, but you do NOT need a SkillForge account to browse or download skills. SkillForge is entirely free and open — just find a skill, download it, and use it in your Claude session.",
+          },
+        },
+      ],
+    },
+  ],
+};
 
 const CASE_LABELS = ["CASE A.", "CASE B.", "CASE C.", "CASE D.", "CASE E.", "CASE F."];
 
@@ -62,6 +181,10 @@ export default async function HomePage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(JSONLD) }}
+      />
       <Navbar />
       <main>
         {/* ── SECTION 01: HERO ─────────────────────────────────── */}
@@ -73,12 +196,19 @@ export default async function HomePage() {
                 <SectionLabel n="01" label="A Free Community Library" className="mb-6" />
                 <h1 className="font-display uppercase tracking-editorial leading-[0.92] text-text mb-6" style={{ fontSize: "clamp(40px, 8vw, 96px)" }}>
                   FREE CLAUDE<br />
-                  SKILLS.<br />
-                  <span style={{ color: "#C8553D" }}>RIGHT HERE.</span>
+                  SKILLS —<br />
+                  <span style={{ color: "#C8553D" }}>BUILT BY THE<br />COMMUNITY.</span>
                 </h1>
-                <p className="font-dm text-base text-muted leading-relaxed max-w-[480px] mb-10">
+                <p className="font-dm text-base text-muted leading-relaxed max-w-[480px] mb-4">
                   Discover, share, and deploy Claude AI skills built by the community.
                   From writing to automation — all free, all open, all yours.
+                </p>
+                <p className="font-dm text-sm text-muted leading-relaxed max-w-[480px] mb-10">
+                  A <strong className="text-text">Claude skill</strong> is a reusable system prompt that
+                  transforms Claude AI into a specialist — a copywriter, code reviewer, research
+                  analyst, or any expert you need. Browse 940+ free skills, download in one click,
+                  and paste into Claude to get expert-level results instantly. No signup, no cost,
+                  no plugins. Just skills that work.
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <a

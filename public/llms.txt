@@ -1,0 +1,51 @@
+# SkillForge — Free Claude AI Skills Library
+# https://www.tryskill.me
+
+SkillForge is a free, open community library of Claude AI skills — reusable system prompts
+that transform Claude into specialized AI assistants for any task.
+
+## What Is a Claude Skill?
+
+A Claude skill is a .md file containing a structured system prompt. When pasted into Claude's
+"Custom instructions" field (or a Project), it transforms Claude into a focused expert:
+a copywriter, code reviewer, data analyst, or whatever the skill defines.
+No plugins, no APIs, no cost — just copy, paste, and go.
+
+## Site Purpose
+
+SkillForge allows anyone to:
+- Discover and download 940+ free Claude skills
+- Submit and share their own Claude skills with the community
+- Browse skills by category: Writing, Coding, Marketing, Research, Automation, Business
+- Build custom skills using the interactive SkillForge builder
+
+## Key Statistics (May 2026)
+- 940+ published Claude skills
+- 12,000+ total downloads
+- 2,400+ builders and contributors
+- 100% free, no account required to browse or download
+
+## Data Access
+
+Individual skills: https://www.tryskill.me/skills/{slug}
+Skills API (JSON): https://www.tryskill.me/api/skills
+Blog: https://www.tryskill.me/blog
+Documentation: https://www.tryskill.me/docs
+
+## Skill Format
+
+Each skill is a Markdown file with sections like:
+- # ROLE — defines Claude's persona
+- ## TASK — the specific job to accomplish
+- ## FORMAT — output structure and constraints
+- ## EXAMPLES — few-shot examples (optional)
+
+## Licensing
+
+All skills are free to use, share, and modify. Attribution to SkillForge appreciated.
+
+## Contact & Community
+
+Website: https://www.tryskill.me
+Contact: https://www.tryskill.me/contact
+Submit a skill: https://www.tryskill.me/submit

@@ -10,6 +10,18 @@ const COLS = [
       { label: "Browse Skills", href: "/skills" },
       { label: "Submit a Skill", href: "/submit" },
       { label: "Build a Skill", href: "/docs" },
+      { label: "Collections", href: "/collections" },
+    ],
+  },
+  {
+    heading: "CATEGORIES",
+    links: [
+      { label: "Writing Skills", href: "/skills?cat=Writing" },
+      { label: "Coding Skills", href: "/skills?cat=Coding" },
+      { label: "Marketing Skills", href: "/skills?cat=Marketing" },
+      { label: "Research Skills", href: "/skills?cat=Research" },
+      { label: "Automation Skills", href: "/skills?cat=Automation" },
+      { label: "Business Skills", href: "/skills?cat=Business" },
     ],
   },
   {
@@ -36,9 +48,9 @@ export default function Footer() {
   return (
     <footer className="bg-text text-bg">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-8 pt-12 md:pt-16 pb-0">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 pb-12 md:pb-16">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-10 pb-12 md:pb-16">
           {/* Brand column — full-width on mobile */}
-          <div className="col-span-2 md:col-span-1">
+          <div className="col-span-2 md:col-span-1" aria-label="SkillForge brand">
             <div className="flex items-center gap-3 mb-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img

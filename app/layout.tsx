@@ -27,8 +27,69 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SkillForge — Free Claude AI Skills Library",
-  description: "Discover, download, and build free Claude AI skills. Join 2,400+ builders.",
+  metadataBase: new URL("https://www.tryskill.me"),
+
+  title: {
+    default: "Free Claude Skills Library — 940+ Skills | SkillForge",
+    template: "%s | SkillForge",
+  },
+  description:
+    "Discover, download, and build free Claude AI skills. Browse 940+ community-built skills for writing, coding, marketing & more. 100% free — no account needed.",
+  keywords: [
+    "Claude skills",
+    "Claude skill",
+    "Claude AI skills",
+    "free Claude skills",
+    "Claude skills library",
+    "Claude AI skill examples",
+    "download Claude skills",
+    "Claude prompt library",
+    "build Claude skill",
+    "Claude skill marketplace",
+  ],
+
+  alternates: {
+    canonical: "https://www.tryskill.me",
+  },
+
+  openGraph: {
+    type: "website",
+    url: "https://www.tryskill.me",
+    siteName: "SkillForge",
+    title: "Free Claude Skills Library — 940+ Skills | SkillForge",
+    description:
+      "Discover, download, and build free Claude AI skills. Browse 940+ community skills for writing, coding, marketing & more. 100% free.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "SkillForge — Free Claude AI Skills Library",
+      },
+    ],
+    locale: "en_US",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Free Claude Skills Library — 940+ Skills | SkillForge",
+    description:
+      "Discover, download, and build free Claude AI skills. Browse 940+ community skills. 100% free.",
+    images: ["/og-image.png"],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+
   icons: {
     icon: { url: "/favicon.svg", type: "image/svg+xml" },
     shortcut: "/favicon.svg",

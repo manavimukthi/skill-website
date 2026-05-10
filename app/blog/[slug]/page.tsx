@@ -1,11 +1,12 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { readDB } from "@/lib/db";
 import type { BlogPost } from "@/app/api/blog/route";
+
+type Props = { params: { slug: string } };
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", {
@@ -71,105 +72,147 @@ function renderContent(content: string) {
   return elements;
 }
 
-export default function BlogPostPage() {
-  const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
+function getPost(slug: string): BlogPost | null {
+  try {
+    const posts = readDB<BlogPost[]>("blog.json", []);
+    return posts.find((p) => p.slug === slug && p.status === "Published") ?? null;
+  } catch {
+    return null;
+  }
+}
 
-  useEffect(() => {
-    fetch(`/api/blog/${slug}`)
-      .then((r) => {
-        if (r.status === 404) { setNotFound(true); return null; }
-        return r.json();
-      })
-      .then((json) => {
-        if (json?.data) setPost(json.data);
-      })
-      .catch(() => setNotFound(true))
-      .finally(() => setLoading(false));
-  }, [slug]);
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const post = getPost(params.slug);
+  if (!post) return { title: "Post Not Found" };
+
+  const desc = post.excerpt?.length > 155
+    ? post.excerpt.slice(0, 152) + "..."
+    : post.excerpt;
+
+  return {
+    title: post.title,
+    description: desc,
+    alternates: { canonical: `https://www.tryskill.me/blog/${post.slug}` },
+    openGraph: {
+      type: "article",
+      url: `https://www.tryskill.me/blog/${post.slug}`,
+      title: post.title,
+      description: desc,
+      siteName: "SkillForge",
+      publishedTime: post.publishedAt ?? undefined,
+      authors: [post.author],
+      tags: post.tags,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: desc,
+    },
+  };
+}
+
+export default function BlogPostPage({ params }: Props) {
+  const post = getPost(params.slug);
+  if (!post) notFound();
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    url: `https://www.tryskill.me/blog/${post.slug}`,
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt,
+    author: { "@type": "Person", name: post.author },
+    publisher: {
+      "@type": "Organization",
+      name: "SkillForge",
+      url: "https://www.tryskill.me",
+    },
+    keywords: post.tags.join(", "),
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar />
       <main className="max-w-[720px] mx-auto px-8 py-16">
-        {loading ? (
-          <div className="space-y-4 animate-pulse">
-            <div className="h-8 bg-card border border-border rounded w-3/4" />
-            <div className="h-4 bg-card border border-border rounded w-1/2" />
-            <div className="h-48 bg-card border border-border rounded mt-8" />
-          </div>
-        ) : notFound || !post ? (
-          <div className="text-center py-24">
-            <p className="font-playfair text-2xl text-text mb-3">Post not found</p>
-            <p className="font-dm text-sm text-muted mb-8">
-              This post may have been removed or the URL is incorrect.
-            </p>
-            <Link
-              href="/blog"
-              className="font-mono text-[11px] uppercase tracking-widest bg-text text-bg px-4 py-2.5 border-2 border-text hover:bg-mustard hover:border-mustard hover:text-text transition-colors"
+        <Link
+          href="/blog"
+          className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-muted hover:text-text transition-colors mb-8"
+        >
+          <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+          All Posts
+        </Link>
+
+        <div
+          className="h-48 w-full rounded-xl border-2 border-text mb-8"
+          style={{ backgroundColor: post.coverBg }}
+        />
+
+        <div className="flex items-center gap-2 mb-4 flex-wrap">
+          {post.tags.map((tag) => (
+            <span
+              key={tag}
+              className="font-mono text-[9px] uppercase tracking-wider bg-tagBg text-tagText px-1.5 py-0.5 rounded"
             >
-              Back to Blog
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <h1 className="font-playfair text-4xl text-text leading-tight mb-4">
+          {post.title}
+        </h1>
+
+        <div className="flex items-center gap-3 mb-8 pb-8 border-b border-border">
+          <span className="font-dm text-sm text-muted">{post.author}</span>
+          <span className="text-border">·</span>
+          {post.publishedAt && (
+            <span className="font-mono text-[10px] text-muted">
+              {formatDate(post.publishedAt)}
+            </span>
+          )}
+        </div>
+
+        <article className="prose-blog">{renderContent(post.content)}</article>
+
+        <div className="mt-12 pt-8 border-t border-border">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-muted mb-4">
+            Browse Claude Skills
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/skills"
+              className="font-mono text-[11px] uppercase tracking-widest bg-text text-bg px-5 py-2.5 border-2 border-text hover:bg-mustard hover:border-mustard hover:text-text transition-colors"
+            >
+              Browse All Skills →
+            </Link>
+            <Link
+              href="/submit"
+              className="font-mono text-[11px] uppercase tracking-widest bg-transparent text-text px-5 py-2.5 border-2 border-text hover:bg-text hover:text-bg transition-colors"
+            >
+              Submit a Skill
             </Link>
           </div>
-        ) : (
-          <>
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-muted hover:text-text transition-colors mb-8"
-            >
-              <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-              All Posts
-            </Link>
+        </div>
 
-            <div
-              className="h-48 w-full rounded-xl border-2 border-text mb-8"
-              style={{ backgroundColor: post.coverBg }}
-            />
-
-            <div className="flex items-center gap-2 mb-4 flex-wrap">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="font-mono text-[9px] uppercase tracking-wider bg-tagBg text-tagText px-1.5 py-0.5 rounded"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <h1 className="font-playfair text-4xl text-text leading-tight mb-4">
-              {post.title}
-            </h1>
-
-            <div className="flex items-center gap-3 mb-8 pb-8 border-b border-border">
-              <span className="font-dm text-sm text-muted">{post.author}</span>
-              <span className="text-border">·</span>
-              {post.publishedAt && (
-                <span className="font-mono text-[10px] text-muted">
-                  {formatDate(post.publishedAt)}
-                </span>
-              )}
-            </div>
-
-            <article className="prose-blog">{renderContent(post.content)}</article>
-
-            <div className="mt-16 pt-8 border-t border-border">
-              <Link
-                href="/blog"
-                className="font-mono text-[11px] uppercase tracking-widest text-muted hover:text-text transition-colors inline-flex items-center gap-1.5"
-              >
-                <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <polyline points="15 18 9 12 15 6" />
-                </svg>
-                Back to Blog
-              </Link>
-            </div>
-          </>
-        )}
+        <div className="mt-8">
+          <Link
+            href="/blog"
+            className="font-mono text-[11px] uppercase tracking-widest text-muted hover:text-text transition-colors inline-flex items-center gap-1.5"
+          >
+            <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+            Back to Blog
+          </Link>
+        </div>
       </main>
       <Footer />
     </>
