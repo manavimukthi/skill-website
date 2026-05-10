@@ -17,13 +17,34 @@ async function fetchSkill(slug: string): Promise<Skill | null> {
   try {
     const { createClient } = await import("@/lib/supabase/server");
     const supabase = createClient();
-    const { data } = await supabase
+
+    // Sanitize: strip whitespace/encoding artifacts
+    const clean = slug.trim().replace(/\s+/g, "-");
+
+    const selectClause = "*, category:categories(id, name, slug, color), author:profiles(username, display_name)";
+
+    // 1. Try by slug first (most common case)
+    const { data: bySlug } = await supabase
       .from("skills")
-      .select("*, category:categories(id, name, slug, color), author:profiles(username, display_name)")
-      .or(`slug.eq.${slug},id.eq.${slug}`)
+      .select(selectClause)
+      .eq("slug", clean)
       .eq("published", true)
       .maybeSingle();
-    return data as Skill | null;
+    if (bySlug) return bySlug as Skill;
+
+    // 2. If it looks like a UUID, try by id (bypasses slug entirely)
+    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (uuidPattern.test(clean)) {
+      const { data: byId } = await supabase
+        .from("skills")
+        .select(selectClause)
+        .eq("id", clean)
+        .eq("published", true)
+        .maybeSingle();
+      if (byId) return byId as Skill;
+    }
+
+    return null;
   } catch {
     return null;
   }

@@ -1,28 +1,65 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readDB, writeDB } from "@/lib/db";
+import { getAdminClient } from "@/lib/supabase/admin";
+
+export const dynamic = "force-dynamic";
 
 type AdminCollection = { id: string; title: string; skillIds: string[] };
+
+async function readCollections(): Promise<AdminCollection[]> {
+  try {
+    const supabase = getAdminClient();
+    const { data } = await supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "collections")
+      .maybeSingle();
+    if (data?.value && Array.isArray(data.value)) {
+      return data.value as AdminCollection[];
+    }
+  } catch {
+    // supabase not configured — return empty
+  }
+  return [];
+}
+
+async function writeCollections(collections: AdminCollection[]): Promise<void> {
+  const supabase = getAdminClient();
+  await supabase.from("site_settings").upsert(
+    { key: "collections", value: collections },
+    { onConflict: "key" }
+  );
+}
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const body = await request.json();
-    const collections = readDB<AdminCollection[]>("collections.json", []);
+    const collections = await readCollections();
     const idx = collections.findIndex((c) => c.id === params.id);
     if (idx === -1) return NextResponse.json({ error: "Not found" }, { status: 404 });
-    collections[idx] = { ...collections[idx], ...body };
-    writeDB("collections.json", collections);
+    collections[idx] = {
+      ...collections[idx],
+      title: body.title?.trim() ?? collections[idx].title,
+      skillIds: Array.isArray(body.skillIds) ? body.skillIds : collections[idx].skillIds,
+    };
+    await writeCollections(collections);
     return NextResponse.json({ data: collections[idx] });
-  } catch {
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  } catch (err) {
+    console.error("/api/admin/collections/[id] PUT", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
-  const collections = readDB<AdminCollection[]>("collections.json", []);
-  const filtered = collections.filter((c) => c.id !== params.id);
-  if (filtered.length === collections.length) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  try {
+    const collections = await readCollections();
+    const filtered = collections.filter((c) => c.id !== params.id);
+    if (filtered.length === collections.length) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+    await writeCollections(filtered);
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error("/api/admin/collections/[id] DELETE", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
-  writeDB("collections.json", filtered);
-  return NextResponse.json({ success: true });
 }
