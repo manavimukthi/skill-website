@@ -94,6 +94,10 @@ export const metadata: Metadata = {
     icon: { url: "/favicon.svg", type: "image/svg+xml" },
     shortcut: "/favicon.svg",
   },
+
+  verification: {
+    google: "shKUN-N3nJj8vLyz2F6rKgXAEbwwX3qdLcXxDsk5Fiw",
+  },
 };
 
 const MAINTENANCE_BYPASS = ["/maintenance", "/admin", "/api/"];
