@@ -15,7 +15,7 @@ export default function CollectionsPage() {
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/admin/collections").then((r) => r.json()),
+      fetch("/api/collections").then((r) => r.json()),
       fetch("/api/skills?limit=100").then((r) => r.json()),
     ])
       .then(([colJson, skillsJson]) => {

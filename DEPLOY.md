@@ -15,7 +15,7 @@
 2. Open `supabase/schema.sql` from this repo and paste the entire contents.
 3. Click **Run** (Ctrl+Enter / Cmd+Enter).
 4. You should see "Success. No rows returned." — this is correct.
-5. Verify the tables exist: **Table Editor** should show `profiles`, `categories`, `skills`, `downloads`, `favorites`, `comments`.
+5. Verify the tables exist: **Table Editor** should show `profiles`, `categories`, `skills`, `downloads`, `favorites`, `comments`, `site_settings`.
 6. Verify the storage bucket exists: **Storage** → `skill-files` should appear as a public bucket.
 
 ---
@@ -85,21 +85,21 @@ Run through this checklist after deploying:
 
 ## Supabase Dashboard Cheatsheet
 
-| Task | Where |
-|------|-------|
-| View all users | Authentication → Users |
-| View skill rows | Table Editor → skills |
-| Check storage files | Storage → skill-files |
-| Monitor API usage | Reports → API |
-| View logs | Logs → Postgres / Edge Functions |
-| Run SQL | SQL Editor |
+| Task                | Where                            |
+| ------------------- | -------------------------------- |
+| View all users      | Authentication → Users           |
+| View skill rows     | Table Editor → skills            |
+| Check storage files | Storage → skill-files            |
+| Monitor API usage   | Reports → API                    |
+| View logs           | Logs → Postgres / Edge Functions |
+| Run SQL             | SQL Editor                       |
 
 ---
 
 ## Notes
 
 - The **admin panel** at `/admin` uses its own hardcoded auth (unchanged from the original). It is independent of Supabase Auth.
-- The **collections page** still uses mock data — the schema does not include a `collections` table. Add one and a `/api/collections` route if you need dynamic collections.
+- The **collections page** now persists through the `site_settings` table under the `collections` key. Make sure `supabase/schema.sql` has been applied so the table exists.
 - The **submit page** (`/submit`) saves form state locally — wire it to `POST /api/skills` when you're ready to accept community submissions.
 - Storage uploads are limited to **100 KB** per `.md` file by the bucket policy.
 - Download rate limiting is **30 downloads per IP per hour**, tracked in the `downloads` table (no Redis required).

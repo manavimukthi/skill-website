@@ -47,15 +47,23 @@ export default function AdminCollectionsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title: editing.title, skillIds: editing.skillIds }),
       });
+      if (!res.ok) {
+        addToast("Failed to create collection", "error");
+        return;
+      }
       const { data } = await res.json();
       setCollections((prev) => [...prev, data]);
       addToast(`Collection "${editing.title}" created`);
     } else {
-      await fetch(`/api/admin/collections/${editing.id}`, {
+      const res = await fetch(`/api/admin/collections/${editing.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title: editing.title, skillIds: editing.skillIds }),
       });
+      if (!res.ok) {
+        addToast("Failed to update collection", "error");
+        return;
+      }
       setCollections((prev) => prev.map((c) => (c.id === editing.id ? editing : c)));
       addToast(`Collection "${editing.title}" updated`);
     }

@@ -85,6 +85,12 @@ CREATE TABLE IF NOT EXISTS comments (
   created_at timestamptz DEFAULT now()
 );
 
+CREATE TABLE IF NOT EXISTS site_settings (
+  key        text PRIMARY KEY,
+  value      jsonb NOT NULL DEFAULT 'null'::jsonb,
+  updated_at timestamptz DEFAULT now()
+);
+
 -- ============================================================
 -- INDEXES
 -- ============================================================
@@ -110,6 +116,7 @@ ALTER TABLE skills     ENABLE ROW LEVEL SECURITY;
 ALTER TABLE downloads  ENABLE ROW LEVEL SECURITY;
 ALTER TABLE favorites  ENABLE ROW LEVEL SECURITY;
 ALTER TABLE comments   ENABLE ROW LEVEL SECURITY;
+ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
 
 -- Profiles
 CREATE POLICY "profiles_select_all"

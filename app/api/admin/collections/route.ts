@@ -1,44 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminClient } from "@/lib/supabase/admin";
+import { AdminCollection, readCollections, writeCollections } from "@/lib/collections-store";
 
 export const dynamic = "force-dynamic";
-
-type AdminCollection = { id: string; title: string; skillIds: string[] };
-
-// ── helpers ──────────────────────────────────────────────────────────────────
-
-/** Read the "collections" key from the site_settings table. Falls back to []. */
-async function readCollections(): Promise<AdminCollection[]> {
-  try {
-    const supabase = getAdminClient();
-    const { data } = await supabase
-      .from("site_settings")
-      .select("value")
-      .eq("key", "collections")
-      .maybeSingle();
-    if (data?.value && Array.isArray(data.value)) {
-      return data.value as AdminCollection[];
-    }
-  } catch {
-    // supabase not configured or table missing — return empty
-  }
-  return [];
-}
-
-/** Upsert the collections array back into site_settings. */
-async function writeCollections(collections: AdminCollection[]): Promise<void> {
-  const supabase = getAdminClient();
-  await supabase.from("site_settings").upsert(
-    { key: "collections", value: collections },
-    { onConflict: "key" }
-  );
-}
 
 // ── route handlers ────────────────────────────────────────────────────────────
 
 export async function GET() {
-  const collections = await readCollections();
-  return NextResponse.json({ data: collections });
+  try {
+    const collections = await readCollections();
+    return NextResponse.json({ data: collections });
+  } catch (err) {
+    console.error("/api/admin/collections GET", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 }
 
 export async function POST(request: NextRequest) {
