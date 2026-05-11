@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { headers } from 'next/headers'
 import type { Metadata } from "next";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
@@ -45,7 +46,10 @@ async function fetchSkill(slug: string): Promise<Skill | null> {
     }
 
     return null;
-  } catch {
+  } catch (err) {
+    // Log server-side so the dev server / Vercel logs show the root cause
+    // eslint-disable-next-line no-console
+    console.error("fetchSkill error for slug:", slug, err);
     return null;
   }
 }
@@ -56,7 +60,9 @@ async function checkAuth(): Promise<boolean> {
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
     return !!user;
-  } catch {
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('checkAuth error', err);
     return false;
   }
 }
@@ -93,10 +99,32 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function SkillPage({ params }: Props) {
-  const [skill, isLoggedIn] = await Promise.all([
+  let [skill, isLoggedIn] = await Promise.all([
     fetchSkill(params.slug),
     checkAuth(),
   ]);
+
+  // Fallback: if direct Supabase lookup failed, try the internal API route.
+  if (!skill) {
+    try {
+      // Build origin from incoming request headers so we match the dev server port
+      const h = headers()
+      const host = h.get('x-forwarded-host') ?? h.get('host')
+      const proto = h.get('x-forwarded-proto') ?? 'http'
+      const origin = host ? `${proto}://${host}` : (process.env.NEXT_PUBLIC_SITE_ORIGIN ?? 'http://localhost:3000')
+      const res = await fetch(`${origin}/api/skills/${encodeURIComponent(params.slug)}`)
+      if (res.ok) {
+        const json = await res.json()
+        skill = json?.data ?? null
+      } else {
+        // eslint-disable-next-line no-console
+        console.error('/api/skills fallback responded with', res.status)
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('fallback fetch to /api/skills failed', err)
+    }
+  }
 
   if (!skill) notFound();
 
