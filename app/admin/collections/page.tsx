@@ -15,6 +15,7 @@ export default function AdminCollectionsPage() {
   const [editing, setEditing] = useState<AdminCollection | null>(null);
   const [isNew, setIsNew] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     Promise.all([fetch("/api/admin/collections"), fetch("/api/admin/skills")])
@@ -41,33 +42,40 @@ export default function AdminCollectionsPage() {
 
   const save = async () => {
     if (!editing || !editing.title.trim()) return;
-    if (isNew) {
-      const res = await fetch("/api/admin/collections", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: editing.title, skillIds: editing.skillIds }),
-      });
-      if (!res.ok) {
-        addToast("Failed to create collection", "error");
-        return;
+    setIsSaving(true);
+    try {
+      if (isNew) {
+        const res = await fetch("/api/admin/collections", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title: editing.title, skillIds: editing.skillIds }),
+        });
+        if (!res.ok) {
+          addToast("Failed to create collection", "error");
+          return;
+        }
+        const json = await res.json();
+        setCollections((prev) => [...prev, json.data]);
+        addToast(`Collection "${editing.title}" created`);
+      } else {
+        const res = await fetch(`/api/admin/collections/${editing.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title: editing.title, skillIds: editing.skillIds }),
+        });
+        if (!res.ok) {
+          addToast("Failed to update collection", "error");
+          return;
+        }
+        setCollections((prev) => prev.map((c) => (c.id === editing.id ? editing : c)));
+        addToast(`Collection "${editing.title}" updated`);
       }
-      const { data } = await res.json();
-      setCollections((prev) => [...prev, data]);
-      addToast(`Collection "${editing.title}" created`);
-    } else {
-      const res = await fetch(`/api/admin/collections/${editing.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: editing.title, skillIds: editing.skillIds }),
-      });
-      if (!res.ok) {
-        addToast("Failed to update collection", "error");
-        return;
-      }
-      setCollections((prev) => prev.map((c) => (c.id === editing.id ? editing : c)));
-      addToast(`Collection "${editing.title}" updated`);
+      setEditing(null);
+    } catch {
+      addToast("Failed to save collection", "error");
+    } finally {
+      setIsSaving(false);
     }
-    setEditing(null);
   };
 
   const del = async (id: string) => {
@@ -150,7 +158,7 @@ export default function AdminCollectionsPage() {
 
       {editing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setEditing(null)} />
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => { if (!isSaving) setEditing(null); }} />
           <div className="relative bg-card border border-border rounded-xl p-6 w-full max-w-lg shadow-xl max-h-[90vh] overflow-y-auto">
             <h3 className="font-dm font-semibold text-base text-text mb-4">
               {isNew ? "New Collection" : "Edit Collection"}
@@ -194,14 +202,15 @@ export default function AdminCollectionsPage() {
             <div className="flex gap-3">
               <button
                 onClick={save}
-                disabled={!editing.title.trim()}
+                disabled={!editing.title.trim() || isSaving}
                 className="font-dm text-sm font-medium bg-accent text-white px-5 py-2.5 rounded-md hover:bg-accentDk disabled:opacity-50 transition-colors"
               >
-                {isNew ? "Create" : "Save Changes"}
+                {isSaving ? "Saving…" : isNew ? "Create" : "Save Changes"}
               </button>
               <button
-                onClick={() => setEditing(null)}
-                className="font-dm text-sm text-muted border border-border px-5 py-2.5 rounded-md hover:text-text transition-colors"
+                onClick={() => { if (!isSaving) setEditing(null); }}
+                disabled={isSaving}
+                className="font-dm text-sm text-muted border border-border px-5 py-2.5 rounded-md hover:text-text disabled:opacity-50 transition-colors"
               >
                 Cancel
               </button>

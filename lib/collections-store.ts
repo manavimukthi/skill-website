@@ -7,9 +7,9 @@ const LEGACY_COLLECTIONS_FILE = "collections.json";
 const COLLECTIONS_KEY = "collections";
 
 export async function readCollections(): Promise<AdminCollection[]> {
-  const supabase = getAdminClient();
   let data: any = null;
   try {
+    const supabase = getAdminClient();
     const res = await supabase
       .from("site_settings")
       .select("value")
@@ -18,9 +18,6 @@ export async function readCollections(): Promise<AdminCollection[]> {
     if (res.error) throw res.error;
     data = res.data;
   } catch (err) {
-    // If the table doesn't exist or Supabase isn't configured in this env,
-    // fall back to the local data file instead of throwing so the app stays usable.
-    // This mirrors previous behavior where `data/collections.json` was the source of truth in dev.
     // eslint-disable-next-line no-console
     console.error("Supabase readCollections error, falling back to local data:", err?.message || err);
   }
@@ -44,13 +41,23 @@ export async function writeCollections(collections: AdminCollection[]): Promise<
   const supabase = getAdminClient();
 
   try {
-    const { error } = await supabase
+    // Try updating existing row first (avoids needing a unique constraint for upsert)
+    const { data: updated, error: updateError } = await supabase
       .from("site_settings")
-      .upsert({ key: COLLECTIONS_KEY, value: collections }, { onConflict: "key" });
+      .update({ value: collections })
+      .eq("key", COLLECTIONS_KEY)
+      .select("key");
 
-    if (error) throw error;
+    if (updateError) throw updateError;
+
+    if (!updated || updated.length === 0) {
+      // No row existed — insert one
+      const { error: insertError } = await supabase
+        .from("site_settings")
+        .insert({ key: COLLECTIONS_KEY, value: collections });
+      if (insertError) throw insertError;
+    }
   } catch (err) {
-    // If Supabase isn't available or the table is missing, persist locally so admin actions still work in dev.
     // eslint-disable-next-line no-console
     console.error("Supabase writeCollections error, writing to local file instead:", err?.message || err);
     const { writeDB } = await import("@/lib/db");
