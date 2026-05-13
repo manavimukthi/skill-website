@@ -30,11 +30,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.tryskill.me"),
 
   title: {
-    default: "SkillForge — Free Claude AI Skills Library | 940+ Free Skills",
-    template: "%s | SkillForge",
+    default: "TRYSKILL — Free Claude AI Skills Library | 940+ Free Skills",
+    template: "%s | TRYSKILL",
   },
   description:
-    "Discover, download, and build free Claude AI skills. Browse 940+ community-built skills for writing, coding, marketing & more. 100% free — no account needed.",
+    "TRYSKILL is the #1 free Claude AI skills library. Download 940+ community-built Claude skills for writing, coding, marketing, research & automation.",
   keywords: [
     "Claude skills",
     "Claude skill",
@@ -55,16 +55,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://www.tryskill.me",
-    siteName: "SkillForge",
-    title: "SkillForge — Free Claude AI Skills Library | 940+ Free Skills",
+    siteName: "TRYSKILL",
+    title: "TRYSKILL — Free Claude AI Skills Library | 940+ Free Skills",
     description:
-      "Discover, download, and build free Claude AI skills. Browse 940+ community skills for writing, coding, marketing & more. 100% free.",
+      "TRYSKILL is the #1 free Claude AI skills library. Download 940+ community-built Claude skills for writing, coding, marketing, research & automation.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "SkillForge — Free Claude AI Skills Library",
+        alt: "TRYSKILL — Free Claude AI Skills Library",
       },
     ],
     locale: "en_US",
@@ -72,9 +72,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "SkillForge — Free Claude AI Skills Library | 940+ Free Skills",
+    title: "TRYSKILL — Free Claude AI Skills Library | 940+ Free Skills",
     description:
-      "Discover, download, and build free Claude AI skills. Browse 940+ community skills. 100% free.",
+      "TRYSKILL is the #1 free Claude AI skills library. Download 940+ community-built Claude skills for writing, coding, marketing, research & automation.",
     images: ["/og-image.png"],
   },
 

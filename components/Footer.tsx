@@ -35,7 +35,7 @@ const COLS = [
   {
     heading: "COMMUNITY",
     links: [
-      { label: "Discord", href: "/contact" },
+      { label: "Reddit", href: "https://www.reddit.com/r/TrySkill/s/ZUEwO2m56f" },
       { label: "Contact", href: "/contact" },
     ],
   },
@@ -89,7 +89,7 @@ export default function Footer() {
         {/* Bottom strip */}
         <div className="border-t border-mustard py-5 flex flex-col md:flex-row items-center justify-between gap-3">
           <p className="font-mono text-[11px] text-bg/50 uppercase tracking-widest">
-            © 2026 SKILLFORGE · MADE WITH CLAUDE
+            © 2026 SKILLFORGE · ALL RIGHTS RESERVED
           </p>
           <p className="font-mono text-[11px] text-bg/50 uppercase tracking-widest flex items-center gap-2">
             V1.0.0 · STATUS: ALL SYSTEMS GO
