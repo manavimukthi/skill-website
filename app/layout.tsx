@@ -30,11 +30,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.tryskill.me"),
 
   title: {
-    default: "TRYSKILL — Free Claude AI Skills Library | 940+ Free Skills",
-    template: "%s | TRYSKILL",
+    default: "TrySkill — Free Claude AI Skills Library | 940+ Free Skills",
+    template: "%s | TrySkill",
   },
   description:
-    "TRYSKILL is the #1 free Claude AI skills library. Download 940+ community-built Claude skills for writing, coding, marketing, research & automation.",
+    "TrySkill is the #1 free Claude AI skills library. Download 940+ community-built Claude skills for writing, coding, marketing, research & automation.",
   keywords: [
     "Claude skills",
     "Claude skill",
@@ -55,16 +55,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://www.tryskill.me",
-    siteName: "TRYSKILL",
-    title: "TRYSKILL — Free Claude AI Skills Library | 940+ Free Skills",
+    siteName: "TrySkill",
+    title: "TrySkill — Free Claude AI Skills Library | 940+ Free Skills",
     description:
-      "TRYSKILL is the #1 free Claude AI skills library. Download 940+ community-built Claude skills for writing, coding, marketing, research & automation.",
+      "TrySkill is the #1 free Claude AI skills library. Download 940+ community-built Claude skills for writing, coding, marketing, research & automation.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "TRYSKILL — Free Claude AI Skills Library",
+        alt: "TrySkill — Free Claude AI Skills Library",
       },
     ],
     locale: "en_US",
@@ -72,9 +72,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "TRYSKILL — Free Claude AI Skills Library | 940+ Free Skills",
+    title: "TrySkill — Free Claude AI Skills Library | 940+ Free Skills",
     description:
-      "TRYSKILL is the #1 free Claude AI skills library. Download 940+ community-built Claude skills for writing, coding, marketing, research & automation.",
+      "TrySkill is the #1 free Claude AI skills library. Download 940+ community-built Claude skills for writing, coding, marketing, research & automation.",
     images: ["/og-image.png"],
   },
 
@@ -91,8 +91,14 @@ export const metadata: Metadata = {
   },
 
   icons: {
-    icon: { url: "/favicon.svg", type: "image/svg+xml" },
-    shortcut: "/favicon.svg",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
 
   verification: {
@@ -116,6 +122,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
         <script
           dangerouslySetInnerHTML={{
             __html: `try{const t=localStorage.getItem('sf_theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}`,

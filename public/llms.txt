@@ -1,7 +1,7 @@
-# SkillForge — Free Claude AI Skills Library
+# TrySkill — Free Claude AI Skills Library
 # https://www.tryskill.me
 
-SkillForge is a free, open community library of Claude AI skills — reusable system prompts
+TrySkill is a free, open community library of Claude AI skills — reusable system prompts
 that transform Claude into specialized AI assistants for any task.
 
 ## What Is a Claude Skill?
@@ -13,11 +13,11 @@ No plugins, no APIs, no cost — just copy, paste, and go.
 
 ## Site Purpose
 
-SkillForge allows anyone to:
+TrySkill allows anyone to:
 - Discover and download 940+ free Claude skills
 - Submit and share their own Claude skills with the community
 - Browse skills by category: Writing, Coding, Marketing, Research, Automation, Business
-- Build custom skills using the interactive SkillForge builder
+- Build custom skills using the interactive TrySkill builder
 
 ## Key Statistics (May 2026)
 - 940+ published Claude skills
@@ -42,7 +42,7 @@ Each skill is a Markdown file with sections like:
 
 ## Licensing
 
-All skills are free to use, share, and modify. Attribution to SkillForge appreciated.
+All skills are free to use, share, and modify. Attribution to TrySkill appreciated.
 
 ## Contact & Community
 

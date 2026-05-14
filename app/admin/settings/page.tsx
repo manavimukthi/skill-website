@@ -51,7 +51,7 @@ const DEFAULT: Settings = {
   maintenanceMode: false,
   adsense: { publisherId: "pub-0000000000000000", heroSlotId: "", sidebarSlotId: "", gridSlotId: "", footerSlotId: "", hero: true, sidebar: false, grid: true, footer: false },
   api: { apiKey: "", model: "claude-sonnet-4-6", maxTokens: 4096 },
-  notifications: { newSubmission: true, submissionEmail: "admin@skillforge.com", weeklyStats: true, newSubscriber: false },
+  notifications: { newSubmission: true, submissionEmail: "admin@tryskill.com", weeklyStats: true, newSubscriber: false },
 };
 
 async function saveSettings(patch: Partial<Settings>) {

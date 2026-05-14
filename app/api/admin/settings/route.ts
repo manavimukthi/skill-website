@@ -4,7 +4,7 @@ import { readDB, writeDB } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 const DEFAULT_SETTINGS = {
-  siteName: "SkillForge",
+  siteName: "TrySkill",
   siteDescription: "The best free Claude AI skills on the internet.",
   skillsPerPage: 16,
   maintenanceMode: false,
@@ -16,7 +16,7 @@ const DEFAULT_SETTINGS = {
   api: { apiKey: "", model: "claude-sonnet-4-6", maxTokens: 4096 },
   notifications: {
     newSubmission: true,
-    submissionEmail: "admin@skillforge.com",
+    submissionEmail: "admin@tryskill.com",
     weeklyStats: true,
     newSubscriber: false,
   },
