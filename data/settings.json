@@ -21,7 +21,7 @@
   },
   "notifications": {
     "newSubmission": true,
-    "submissionEmail": "admin@tryskill.com",
+    "submissionEmail": "admin@skillforge.com",
     "weeklyStats": true,
     "newSubscriber": false
   }

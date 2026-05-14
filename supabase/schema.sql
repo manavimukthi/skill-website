@@ -1,5 +1,5 @@
 -- ============================================================
--- TrySkill Database Schema
+-- SkillForge Database Schema
 -- Run this in Supabase SQL Editor: Project → SQL Editor → New Query
 -- ============================================================
 
@@ -85,15 +85,6 @@ CREATE TABLE IF NOT EXISTS comments (
   created_at timestamptz DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS user_collections (
-  id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id    uuid REFERENCES profiles ON DELETE CASCADE,
-  title      text NOT NULL,
-  skill_ids  uuid[] NOT NULL DEFAULT '{}'::uuid[],
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz DEFAULT now()
-);
-
 CREATE TABLE IF NOT EXISTS site_settings (
   key        text PRIMARY KEY,
   value      jsonb NOT NULL DEFAULT 'null'::jsonb,
@@ -114,8 +105,6 @@ CREATE INDEX IF NOT EXISTS idx_downloads_skill    ON downloads(skill_id);
 CREATE INDEX IF NOT EXISTS idx_downloads_created  ON downloads(created_at);
 CREATE INDEX IF NOT EXISTS idx_favorites_user     ON favorites(user_id);
 CREATE INDEX IF NOT EXISTS idx_favorites_skill    ON favorites(skill_id);
-CREATE INDEX IF NOT EXISTS idx_user_collections_user ON user_collections(user_id);
-CREATE INDEX IF NOT EXISTS idx_user_collections_updated ON user_collections(updated_at DESC);
 
 -- ============================================================
 -- ROW LEVEL SECURITY
@@ -127,7 +116,6 @@ ALTER TABLE skills     ENABLE ROW LEVEL SECURITY;
 ALTER TABLE downloads  ENABLE ROW LEVEL SECURITY;
 ALTER TABLE favorites  ENABLE ROW LEVEL SECURITY;
 ALTER TABLE comments   ENABLE ROW LEVEL SECURITY;
-ALTER TABLE user_collections ENABLE ROW LEVEL SECURITY;
 ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
 
 -- Profiles
@@ -183,19 +171,6 @@ CREATE POLICY "comments_update_own"
 
 CREATE POLICY "comments_delete_own"
   ON comments FOR DELETE USING (auth.uid() = user_id);
-
--- User collections
-CREATE POLICY "user_collections_select_own"
-  ON user_collections FOR SELECT USING (auth.uid() = user_id);
-
-CREATE POLICY "user_collections_insert_own"
-  ON user_collections FOR INSERT WITH CHECK (auth.uid() = user_id);
-
-CREATE POLICY "user_collections_update_own"
-  ON user_collections FOR UPDATE USING (auth.uid() = user_id);
-
-CREATE POLICY "user_collections_delete_own"
-  ON user_collections FOR DELETE USING (auth.uid() = user_id);
 
 -- ============================================================
 -- TRIGGERS

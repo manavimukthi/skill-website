@@ -4,8 +4,6 @@ import type { Submission, ActivityItem } from "@/lib/admin-data";
 import { getAdminClient } from "@/lib/supabase/admin";
 import { mapAdminSkill } from "@/lib/admin-skills";
 
-export const dynamic = "force-dynamic";
-
 function generateDailyData(days: number) {
   const data = [];
   const now = new Date();

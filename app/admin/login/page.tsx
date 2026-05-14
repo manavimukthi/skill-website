@@ -7,7 +7,7 @@ import { useAdminAuth } from "@/lib/admin-auth";
 export default function AdminLoginPage() {
   const { login } = useAdminAuth();
   const router = useRouter();
-  const [email, setEmail] = useState("admin@tryskill.com");
+  const [email, setEmail] = useState("admin@skillforge.com");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
