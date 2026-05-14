@@ -77,7 +77,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? skill.description.length > 155
       ? skill.description.slice(0, 152) + "..."
       : skill.description
-    : `Download this free Claude ${categoryName} skill from SkillForge.`;
+    : `Download this free Claude ${categoryName} skill from TrySkill.`;
 
   return {
     title: `${skill.title} — Free Claude ${categoryName} Skill`,
@@ -86,13 +86,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       type: "article",
       url: `https://www.tryskill.me/skills/${skill.slug}`,
-      title: `${skill.title} | SkillForge`,
+      title: `${skill.title} | TrySkill`,
       description: desc,
-      siteName: "SkillForge",
+      siteName: "TrySkill",
     },
     twitter: {
       card: "summary",
-      title: `${skill.title} | SkillForge`,
+      title: `${skill.title} | TrySkill`,
       description: desc,
     },
   };
@@ -146,7 +146,7 @@ export default async function SkillPage({ params }: Props) {
         downloadUrl: `https://www.tryskill.me/skills/${skill.slug}`,
         datePublished: skill.created_at,
         dateModified: skill.updated_at ?? skill.created_at,
-        publisher: { "@type": "Organization", name: "SkillForge", url: "https://www.tryskill.me" },
+        publisher: { "@type": "Organization", name: "TrySkill", url: "https://www.tryskill.me" },
         ...(author?.username && {
           author: { "@type": "Person", name: author.display_name ?? author.username },
         }),

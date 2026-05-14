@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://www.tryskill.me/skills" },
   openGraph: {
     url: "https://www.tryskill.me/skills",
-    title: "Browse Claude Skills — Writing, Coding, Marketing & More | SkillForge",
+    title: "Browse Claude Skills — Writing, Coding, Marketing & More | TrySkill",
     description:
       "940+ free Claude AI skills, organized by category. Download instantly — no signup needed.",
   },

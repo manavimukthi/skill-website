@@ -98,7 +98,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `https://www.tryskill.me/blog/${post.slug}`,
       title: post.title,
       description: desc,
-      siteName: "SkillForge",
+      siteName: "TrySkill",
       publishedTime: post.publishedAt ?? undefined,
       authors: [post.author],
       tags: post.tags,
@@ -126,7 +126,7 @@ export default function BlogPostPage({ params }: Props) {
     author: { "@type": "Person", name: post.author },
     publisher: {
       "@type": "Organization",
-      name: "SkillForge",
+      name: "TrySkill",
       url: "https://www.tryskill.me",
     },
     keywords: post.tags.join(", "),

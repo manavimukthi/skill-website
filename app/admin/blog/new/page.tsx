@@ -38,7 +38,7 @@ export default function NewBlogPostPage() {
       slug: "",
       excerpt: "",
       content: "",
-      author: "SkillForge Team",
+      author: "TrySkill Team",
       coverBg: "#D6E4F0",
       tags: "",
       status: "Draft",
@@ -136,7 +136,7 @@ export default function NewBlogPostPage() {
                 </label>
                 <input
                   {...register("author")}
-                  placeholder="SkillForge Team"
+                  placeholder="TrySkill Team"
                   className={inputClass()}
                 />
               </div>

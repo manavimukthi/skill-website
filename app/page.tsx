@@ -9,13 +9,13 @@ import TryItBuilder from "@/components/TryItBuilder";
 import { dbSkillToSkill, type Skill } from "@/lib/skills";
 
 export const metadata: Metadata = {
-  title: "SkillForge — Free Claude AI Skills Library | 940+ Free Skills",
+  title: "TrySkill — Free Claude AI Skills Library | 940+ Free Skills",
   description:
-    "SkillForge is the #1 free Claude AI skills library. Download 940+ community-built Claude skills for writing, coding, marketing, research & automation. No signup required.",
+    "TrySkill is the #1 free Claude AI skills library. Download 940+ community-built Claude skills for writing, coding, marketing, research & automation. No signup required.",
   alternates: { canonical: "https://www.tryskill.me" },
   openGraph: {
     url: "https://www.tryskill.me",
-    title: "Free Claude Skills Library — 940+ Skills | SkillForge",
+    title: "Free Claude Skills Library — 940+ Skills | TrySkill",
     description:
       "The #1 free Claude AI skills library. 940+ community-built skills. No signup required.",
   },
@@ -28,7 +28,7 @@ const JSONLD = {
       "@type": "WebSite",
       "@id": "https://www.tryskill.me/#website",
       url: "https://www.tryskill.me",
-      name: "SkillForge",
+      name: "TrySkill",
       description: "Free Claude AI Skills Library — community-built system prompts for Claude",
       potentialAction: {
         "@type": "SearchAction",
@@ -42,7 +42,7 @@ const JSONLD = {
     {
       "@type": "Organization",
       "@id": "https://www.tryskill.me/#organization",
-      name: "SkillForge",
+      name: "TrySkill",
       url: "https://www.tryskill.me",
       logo: {
         "@type": "ImageObject",
@@ -78,7 +78,7 @@ const JSONLD = {
           name: "Are Claude skills free?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Yes — all Claude skills on SkillForge are 100% free to download, use, and share. No subscription, no account required to browse or download. SkillForge is a community library maintained by builders who share their skills openly.",
+            text: "Yes — all Claude skills on TrySkill are 100% free to download, use, and share. No subscription, no account required to browse or download. TrySkill is a community library maintained by builders who share their skills openly.",
           },
         },
         {
@@ -86,7 +86,7 @@ const JSONLD = {
           name: "How do I install a Claude skill?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "To use a Claude skill: (1) Download the .md file from SkillForge. (2) Open Claude at claude.ai and create a new Project, or start a new conversation. (3) In Project settings, paste the skill content into the 'Custom instructions' field. For a regular chat, paste it at the start of your first message. (4) Start chatting — Claude will now behave as the specialist defined by the skill.",
+            text: "To use a Claude skill: (1) Download the .md file from TrySkill. (2) Open Claude at claude.ai and create a new Project, or start a new conversation. (3) In Project settings, paste the skill content into the 'Custom instructions' field. For a regular chat, paste it at the start of your first message. (4) Start chatting — Claude will now behave as the specialist defined by the skill.",
           },
         },
         {
@@ -94,7 +94,7 @@ const JSONLD = {
           name: "Can I build my own Claude skill?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Absolutely. SkillForge has a built-in skill builder you can use right on the homepage — no signup required. You can also read the docs for a complete guide on writing effective Claude skills. Once you've built a skill, you can submit it to the library to share with 2,400+ builders.",
+            text: "Absolutely. TrySkill has a built-in skill builder you can use right on the homepage — no signup required. You can also read the docs for a complete guide on writing effective Claude skills. Once you've built a skill, you can submit it to the library to share with 2,400+ builders.",
           },
         },
         {
@@ -102,7 +102,7 @@ const JSONLD = {
           name: "What categories of Claude skills are available?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "SkillForge organizes Claude skills into six main categories: Writing (blog posts, emails, copywriting), Coding (code review, debugging, documentation), Marketing (ads, social media, SEO), Research (analysis, summarization, fact-checking), Automation (workflows, data processing), and Business (strategy, reports, presentations).",
+            text: "TrySkill organizes Claude skills into six main categories: Writing (blog posts, emails, copywriting), Coding (code review, debugging, documentation), Marketing (ads, social media, SEO), Research (analysis, summarization, fact-checking), Automation (workflows, data processing), and Business (strategy, reports, presentations).",
           },
         },
         {
@@ -118,7 +118,7 @@ const JSONLD = {
           name: "Do I need a Claude account to use skills?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "You need a Claude account at claude.ai to use the skills, but you do NOT need a SkillForge account to browse or download skills. SkillForge is entirely free and open — just find a skill, download it, and use it in your Claude session.",
+            text: "You need a Claude account at claude.ai to use the skills, but you do NOT need a TrySkill account to browse or download skills. TrySkill is entirely free and open — just find a skill, download it, and use it in your Claude session.",
           },
         },
       ],

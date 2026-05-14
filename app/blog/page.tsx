@@ -40,7 +40,7 @@ export default function BlogPage() {
             Insights & Guides
           </h1>
           <p className="font-dm text-base text-muted max-w-xl">
-            Tutorials, tips, and updates from the SkillForge team to help you get
+            Tutorials, tips, and updates from the TrySkill team to help you get
             the most out of Claude AI skills.
           </p>
         </div>

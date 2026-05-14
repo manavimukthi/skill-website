@@ -45,7 +45,7 @@ type Settings = {
 };
 
 const DEFAULT: Settings = {
-  siteName: "SkillForge",
+  siteName: "TrySkill",
   siteDescription: "The best free Claude AI skills on the internet.",
   skillsPerPage: 16,
   maintenanceMode: false,
@@ -281,7 +281,7 @@ export default function SettingsPage() {
     <div className="flex flex-col gap-6">
       <div>
         <h2 className="font-playfair text-2xl text-text">Settings</h2>
-        <p className="font-dm text-sm text-muted mt-0.5">Configure your SkillForge site.</p>
+        <p className="font-dm text-sm text-muted mt-0.5">Configure your TrySkill site.</p>
       </div>
 
       <div className="flex items-center gap-0 border-b border-border">

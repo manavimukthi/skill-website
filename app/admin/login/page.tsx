@@ -30,7 +30,7 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-bg flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="font-playfair text-3xl text-text mb-1">SkillForge</h1>
+          <h1 className="font-playfair text-3xl text-text mb-1">TrySkill</h1>
           <p className="font-mono text-xs text-muted uppercase tracking-widest">Admin Panel</p>
         </div>
 

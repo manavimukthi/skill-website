@@ -41,7 +41,7 @@ Once you have a working skill, submit it to the library so the community can ben
   {
     id: "submitting",
     title: "Submitting a Skill",
-    content: `Anyone can submit a skill to the library. All submissions are reviewed by the SkillForge team before publishing.
+    content: `Anyone can submit a skill to the library. All submissions are reviewed by the TrySkill team before publishing.
 
 **Requirements:**
 - The skill must produce consistent, high-quality output

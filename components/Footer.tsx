@@ -50,12 +50,12 @@ export default function Footer() {
       <div className="max-w-[1200px] mx-auto px-4 sm:px-8 pt-12 md:pt-16 pb-0">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-10 pb-12 md:pb-16">
           {/* Brand column — full-width on mobile */}
-          <div className="col-span-2 md:col-span-1" aria-label="SkillForge brand">
+          <div className="col-span-2 md:col-span-1" aria-label="TrySkill brand">
             <div className="flex items-center gap-3 mb-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={isDark ? "/logo-light.svg" : "/logo-dark.svg"}
-                alt="SkillForge"
+                alt="TrySkill"
                 style={{ height: 36, width: "auto", display: "block" }}
               />
             </div>
@@ -89,7 +89,7 @@ export default function Footer() {
         {/* Bottom strip */}
         <div className="border-t border-mustard py-5 flex flex-col md:flex-row items-center justify-between gap-3">
           <p className="font-mono text-[11px] text-bg/50 uppercase tracking-widest">
-            © 2026 SKILLFORGE · ALL RIGHTS RESERVED
+            © 2026 TRYSKILL · ALL RIGHTS RESERVED
           </p>
           <p className="font-mono text-[11px] text-bg/50 uppercase tracking-widest flex items-center gap-2">
             V1.0.0 · STATUS: ALL SYSTEMS GO

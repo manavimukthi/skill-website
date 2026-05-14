@@ -10,7 +10,7 @@ const ENTRIES = [
     tag: "Major Release",
     tagColor: "bg-accent text-white",
     changes: [
-      { type: "new", text: "Public launch of SkillForge — the free Claude AI skills library." },
+      { type: "new", text: "Public launch of TrySkill — the free Claude AI skills library." },
       { type: "new", text: "Blog with tutorials, tips, and guides for Claude skill builders." },
       { type: "new", text: "Skill detail pages with one-click download and favorite support." },
       { type: "new", text: "Admin panel with full skill, blog, and submission management." },
@@ -68,7 +68,7 @@ export default function ChangelogPage() {
             </h1>
             <p className="font-dm text-base text-muted max-w-xl">
               A record of all notable updates, improvements, and fixes to
-              SkillForge.
+              TrySkill.
             </p>
           </div>
         </div>
