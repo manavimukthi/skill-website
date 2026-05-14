@@ -91,8 +91,14 @@ export const metadata: Metadata = {
   },
 
   icons: {
-    icon: { url: "/favicon.svg", type: "image/svg+xml" },
-    shortcut: "/favicon.svg",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
 
   verification: {
@@ -119,6 +125,20 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <script
           dangerouslySetInnerHTML={{
             __html: `try{const t=localStorage.getItem('sf_theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}`,
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "TrySkill",
+              alternateName: "TRYSKILL",
+              url: "https://www.tryskill.me",
+              description:
+                "TRYSKILL is the #1 free Claude AI skills library. Download 940+ community-built Claude skills for writing, coding, marketing, research & automation.",
+            }),
           }}
         />
       </head>
