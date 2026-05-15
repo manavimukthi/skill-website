@@ -16,7 +16,7 @@ export default function CollectionsPage() {
   useEffect(() => {
     Promise.all([
       fetch("/api/collections").then((r) => r.json()),
-      fetch("/api/skills?limit=100").then((r) => r.json()),
+      fetch("/api/skills?limit=1000").then((r) => r.json()),
     ])
       .then(([colJson, skillsJson]) => {
         if (Array.isArray(colJson.data)) setCollections(colJson.data);
