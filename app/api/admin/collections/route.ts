@@ -30,8 +30,8 @@ export async function POST(request: NextRequest) {
     collections.push(newCol);
     await writeCollections(collections);
     return NextResponse.json({ data: newCol }, { status: 201 });
-  } catch (err: any) {
+  } catch (err) {
     console.error("/api/admin/collections POST", err);
-    return NextResponse.json({ error: "Internal server error", detail: err?.message || String(err) }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
