@@ -28,18 +28,10 @@ export async function readCollections(): Promise<AdminCollection[]> {
 export async function writeCollections(collections: AdminCollection[]): Promise<void> {
   const supabase = getAdminClient();
 
-  const { data: updated, error: updateError } = await supabase
+  const { error } = await supabase
     .from("site_settings")
-    .update({ value: collections })
-    .eq("key", COLLECTIONS_KEY)
-    .select("key");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .upsert({ key: COLLECTIONS_KEY, value: collections as any }, { onConflict: "key" });
 
-  if (updateError) throw updateError;
-
-  if (!updated || updated.length === 0) {
-    const { error: insertError } = await supabase
-      .from("site_settings")
-      .insert({ key: COLLECTIONS_KEY, value: collections });
-    if (insertError) throw insertError;
-  }
+  if (error) throw error;
 }

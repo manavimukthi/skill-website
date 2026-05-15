@@ -67,8 +67,10 @@ export default function AdminCollectionsPage() {
           addToast("Failed to update collection", "error");
           return;
         }
-        setCollections((prev) => prev.map((c) => (c.id === editing.id ? editing : c)));
-        addToast(`Collection "${editing.title}" updated`);
+        const json = await res.json();
+        const updated: AdminCollection = json.data ?? editing;
+        setCollections((prev) => prev.map((c) => (c.id === editing.id ? updated : c)));
+        addToast(`Collection "${updated.title}" updated`);
       }
       setEditing(null);
     } catch {
