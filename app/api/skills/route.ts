@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category')
     const search = searchParams.get('search')
     const sort = searchParams.get('sort') ?? 'recent'
-    const limit = Math.min(parseInt(searchParams.get('limit') ?? '20', 10), 100)
+    const limit = Math.min(parseInt(searchParams.get('limit') ?? '20', 10), 1000)
     const offset = parseInt(searchParams.get('offset') ?? '0', 10)
     const featured = searchParams.get('featured') === 'true'
 
