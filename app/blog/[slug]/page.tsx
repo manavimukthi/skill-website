@@ -78,7 +78,8 @@ async function getPost(slug: string): Promise<BlogPost | null> {
   try {
     const posts = await readBlog();
     return posts.find((p) => p.slug === slug && p.status === "Published") ?? null;
-  } catch {
+  } catch (err) {
+    console.error("[blog] getPost error for slug:", slug, err);
     return null;
   }
 }

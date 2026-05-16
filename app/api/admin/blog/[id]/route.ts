@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { readBlog, writeBlog } from "@/lib/blog-store";
 
 export const dynamic = "force-dynamic";
@@ -55,6 +56,8 @@ export async function PATCH(
     };
 
     await writeBlog(posts);
+    revalidatePath("/blog");
+
     return NextResponse.json({ data: posts[idx] });
   } catch (err) {
     console.error("/api/admin/blog/[id] PATCH", err);
@@ -75,6 +78,8 @@ export async function DELETE(
     }
 
     await writeBlog(filtered);
+    revalidatePath("/blog");
+
     return NextResponse.json({ data: { deleted: true } });
   } catch (err) {
     console.error("/api/admin/blog/[id] DELETE", err);

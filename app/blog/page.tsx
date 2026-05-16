@@ -1,10 +1,9 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import type { BlogPost } from "@/app/api/blog/route";
+import { readBlog } from "@/lib/blog-store";
+
+export const dynamic = "force-dynamic";
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", {
@@ -14,19 +13,21 @@ function formatDate(iso: string) {
   });
 }
 
-export default function BlogPage() {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
+export default async function BlogPage() {
+  let posts: Awaited<ReturnType<typeof readBlog>> = [];
 
-  useEffect(() => {
-    fetch("/api/blog")
-      .then((r) => r.json())
-      .then(({ data }) => {
-        if (Array.isArray(data)) setPosts(data);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
+  try {
+    const all = await readBlog();
+    posts = all
+      .filter((p) => p.status === "Published")
+      .sort(
+        (a, b) =>
+          new Date(b.publishedAt ?? b.createdAt).getTime() -
+          new Date(a.publishedAt ?? a.createdAt).getTime()
+      );
+  } catch {
+    // show empty state on error
+  }
 
   return (
     <>
@@ -45,13 +46,7 @@ export default function BlogPage() {
           </p>
         </div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-card border border-border rounded-xl animate-pulse h-72" />
-            ))}
-          </div>
-        ) : posts.length === 0 ? (
+        {posts.length === 0 ? (
           <div className="text-center py-24">
             <p className="font-dm text-muted text-sm">No posts published yet. Check back soon.</p>
           </div>

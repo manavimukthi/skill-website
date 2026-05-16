@@ -13,11 +13,20 @@ export async function readBlog(): Promise<BlogPost[]> {
 
   if (res.error) throw res.error;
 
-  if (res.data?.value && Array.isArray(res.data.value)) {
-    return res.data.value as BlogPost[];
+  // Row exists — parse whatever format Supabase returns
+  if (res.data !== null) {
+    const val = res.data?.value;
+    if (Array.isArray(val)) return val as BlogPost[];
+    if (typeof val === "string") {
+      try {
+        const parsed = JSON.parse(val);
+        if (Array.isArray(parsed)) return parsed as BlogPost[];
+      } catch {}
+    }
+    return [];
   }
 
-  // One-time migration: seed from bundled data/blog.json if Supabase is empty
+  // No row at all — one-time migration from bundled data/blog.json
   try {
     const { readDB } = await import("@/lib/db");
     const legacy = readDB<BlogPost[]>("blog.json", []);

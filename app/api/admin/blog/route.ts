@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { readBlog, writeBlog } from "@/lib/blog-store";
 import type { BlogPost } from "@/app/api/blog/route";
 
@@ -49,6 +50,7 @@ export async function POST(request: NextRequest) {
 
     posts.push(newPost);
     await writeBlog(posts);
+    revalidatePath("/blog");
 
     return NextResponse.json({ data: newPost }, { status: 201 });
   } catch (err) {
