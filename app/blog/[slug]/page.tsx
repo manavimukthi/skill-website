@@ -3,8 +3,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { readDB } from "@/lib/db";
+import { readBlog } from "@/lib/blog-store";
 import type { BlogPost } from "@/app/api/blog/route";
+
+export const dynamic = "force-dynamic";
 
 type Props = { params: { slug: string } };
 
@@ -72,9 +74,9 @@ function renderContent(content: string) {
   return elements;
 }
 
-function getPost(slug: string): BlogPost | null {
+async function getPost(slug: string): Promise<BlogPost | null> {
   try {
-    const posts = readDB<BlogPost[]>("blog.json", []);
+    const posts = await readBlog();
     return posts.find((p) => p.slug === slug && p.status === "Published") ?? null;
   } catch {
     return null;
@@ -82,7 +84,7 @@ function getPost(slug: string): BlogPost | null {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = getPost(params.slug);
+  const post = await getPost(params.slug);
   if (!post) return { title: "Post Not Found" };
 
   const desc = post.excerpt?.length > 155
@@ -111,8 +113,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function BlogPostPage({ params }: Props) {
-  const post = getPost(params.slug);
+export default async function BlogPostPage({ params }: Props) {
+  const post = await getPost(params.slug);
   if (!post) notFound();
 
   const jsonLd = {

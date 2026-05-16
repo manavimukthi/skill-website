@@ -1,28 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readDB, writeDB } from "@/lib/db";
+import { readBlog, writeBlog } from "@/lib/blog-store";
 import type { BlogPost } from "@/app/api/blog/route";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const status = searchParams.get("status");
+  try {
+    const { searchParams } = new URL(request.url);
+    const status = searchParams.get("status");
 
-  const posts = readDB<BlogPost[]>("blog.json", []);
-  const filtered = status && status !== "All"
-    ? posts.filter((p) => p.status === status)
-    : posts;
+    const posts = await readBlog();
+    const filtered = status && status !== "All"
+      ? posts.filter((p) => p.status === status)
+      : posts;
 
-  filtered.sort(
-    (a, b) =>
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
+    filtered.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
 
-  return NextResponse.json({ data: filtered });
+    return NextResponse.json({ data: filtered });
+  } catch (err) {
+    console.error("/api/admin/blog GET", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 }
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const posts = readDB<BlogPost[]>("blog.json", []);
+    const posts = await readBlog();
 
     const now = new Date().toISOString();
     const newPost: BlogPost = {
@@ -41,10 +48,11 @@ export async function POST(request: NextRequest) {
     };
 
     posts.push(newPost);
-    writeDB("blog.json", posts);
+    await writeBlog(posts);
 
     return NextResponse.json({ data: newPost }, { status: 201 });
-  } catch {
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  } catch (err) {
+    console.error("/api/admin/blog POST", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

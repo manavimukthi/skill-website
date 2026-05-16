@@ -1,19 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readDB, writeDB } from "@/lib/db";
-import type { BlogPost } from "@/app/api/blog/route";
+import { readBlog, writeBlog } from "@/lib/blog-store";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const posts = readDB<BlogPost[]>("blog.json", []);
-  const post = posts.find((p) => p.id === params.id);
+  try {
+    const posts = await readBlog();
+    const post = posts.find((p) => p.id === params.id);
 
-  if (!post) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
+    if (!post) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ data: post });
+  } catch (err) {
+    console.error("/api/admin/blog/[id] GET", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
-
-  return NextResponse.json({ data: post });
 }
 
 export async function PATCH(
@@ -22,7 +28,7 @@ export async function PATCH(
 ) {
   try {
     const body = await request.json();
-    const posts = readDB<BlogPost[]>("blog.json", []);
+    const posts = await readBlog();
     const idx = posts.findIndex((p) => p.id === params.id);
 
     if (idx === -1) {
@@ -31,7 +37,6 @@ export async function PATCH(
 
     const existing = posts[idx];
     const now = new Date().toISOString();
-
     const wasUnpublished = existing.status !== "Published";
     const isBeingPublished = body.status === "Published";
 
@@ -49,10 +54,11 @@ export async function PATCH(
           : existing.publishedAt,
     };
 
-    writeDB("blog.json", posts);
+    await writeBlog(posts);
     return NextResponse.json({ data: posts[idx] });
-  } catch {
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  } catch (err) {
+    console.error("/api/admin/blog/[id] PATCH", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -60,13 +66,18 @@ export async function DELETE(
   _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const posts = readDB<BlogPost[]>("blog.json", []);
-  const filtered = posts.filter((p) => p.id !== params.id);
+  try {
+    const posts = await readBlog();
+    const filtered = posts.filter((p) => p.id !== params.id);
 
-  if (filtered.length === posts.length) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
+    if (filtered.length === posts.length) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    await writeBlog(filtered);
+    return NextResponse.json({ data: { deleted: true } });
+  } catch (err) {
+    console.error("/api/admin/blog/[id] DELETE", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
-
-  writeDB("blog.json", filtered);
-  return NextResponse.json({ data: { deleted: true } });
 }
