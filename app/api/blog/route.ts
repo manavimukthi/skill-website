@@ -1,22 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { readBlog } from "@/lib/blog-store";
+export type { BlogPost } from "@/lib/blog-types";
 
 export const dynamic = "force-dynamic";
-
-export type BlogPost = {
-  id: string;
-  slug: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  author: string;
-  coverBg: string;
-  tags: string[];
-  status: "Draft" | "Published";
-  publishedAt: string | null;
-  createdAt: string;
-  updatedAt: string;
-};
 
 export async function GET(request: NextRequest) {
   try {

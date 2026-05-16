@@ -1,5 +1,5 @@
 import { getAdminClient } from "@/lib/supabase/admin";
-import type { BlogPost } from "@/app/api/blog/route";
+import type { BlogPost } from "@/lib/blog-types";
 
 const BLOG_KEY = "blog";
 
