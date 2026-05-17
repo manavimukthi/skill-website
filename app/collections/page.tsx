@@ -1,30 +1,55 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SkillCard from "@/components/SkillCard";
 import { dbSkillToSkill, type Skill } from "@/lib/skills";
 
-type Collection = { id: string; title: string; skillIds: string[] };
+export const metadata: Metadata = {
+  title: "Collections — Curated Claude AI Skill Sets",
+  description:
+    "Curated collections of free Claude AI skills grouped by workflow. Find the perfect set of skills for writing, coding, marketing, research, and more.",
+  alternates: { canonical: "https://www.tryskill.me/collections" },
+  openGraph: {
+    url: "https://www.tryskill.me/collections",
+    title: "Collections — Curated Claude AI Skill Sets | TrySkill",
+    description: "Curated skill groups for every workflow. Browse and download for free.",
+  },
+};
 
-export default function CollectionsPage() {
-  const [collections, setCollections] = useState<Collection[]>([]);
-  const [skills, setSkills] = useState<Skill[]>([]);
-  const [loading, setLoading] = useState(true);
+type AdminCollection = { id: string; title: string; skillIds: string[] };
 
-  useEffect(() => {
-    Promise.all([
-      fetch("/api/collections").then((r) => r.json()),
-      fetch("/api/skills?limit=1000").then((r) => r.json()),
-    ])
-      .then(([colJson, skillsJson]) => {
-        if (Array.isArray(colJson.data)) setCollections(colJson.data);
-        if (Array.isArray(skillsJson.data)) setSkills(skillsJson.data.map(dbSkillToSkill));
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
+async function fetchCollections(): Promise<AdminCollection[]> {
+  try {
+    const { readCollections } = await import("@/lib/collections-store");
+    return await readCollections();
+  } catch {
+    return [];
+  }
+}
+
+async function fetchSkillsByIds(ids: string[]): Promise<Skill[]> {
+  if (ids.length === 0) return [];
+  try {
+    const { createClient } = await import("@/lib/supabase/server");
+    const supabase = createClient();
+    const { data } = await supabase
+      .from("skills")
+      .select("id, slug, title, description, download_count, preview_bg, category:categories(id, name, slug, color)")
+      .in("id", ids)
+      .eq("published", true);
+    return (data ?? []).map(dbSkillToSkill);
+  } catch {
+    return [];
+  }
+}
+
+export default async function CollectionsPage() {
+  const collections = await fetchCollections();
+
+  // Gather all unique skill IDs across collections in one DB query.
+  const allIds = [...new Set(collections.flatMap((c) => c.skillIds))];
+  const allSkills = await fetchSkillsByIds(allIds);
+  const skillsById = new Map(allSkills.map((s) => [s.id, s]));
 
   return (
     <>
@@ -37,23 +62,7 @@ export default function CollectionsPage() {
           </p>
         </div>
 
-        {loading ? (
-          <div className="flex flex-col gap-14">
-            {[...Array(2)].map((_, i) => (
-              <div key={i}>
-                <div className="mb-5 space-y-2">
-                  <div className="h-7 bg-card border border-border rounded w-48 animate-pulse" />
-                  <div className="h-4 bg-card border border-border rounded w-24 animate-pulse" />
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {[...Array(4)].map((_, j) => (
-                    <div key={j} className="bg-card border-2 border-text rounded h-40 animate-pulse" />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : collections.length === 0 ? (
+        {collections.length === 0 ? (
           <div className="text-center py-24">
             <p className="font-dm text-muted">No collections yet. Add some from the admin panel.</p>
           </div>
@@ -61,7 +70,7 @@ export default function CollectionsPage() {
           <div className="flex flex-col gap-14">
             {collections.map((col) => {
               const colSkills = col.skillIds
-                .map((id) => skills.find((s) => s.id === id))
+                .map((id) => skillsById.get(id))
                 .filter(Boolean) as Skill[];
 
               return (

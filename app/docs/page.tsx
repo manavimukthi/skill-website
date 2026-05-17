@@ -1,8 +1,20 @@
-"use client";
-
+import type { Metadata } from "next";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+
+export const metadata: Metadata = {
+  title: "Docs — How to Use Claude AI Skills",
+  description:
+    "Learn how to use, create, and submit Claude AI skills. Step-by-step guides, writing tips, FAQ, and submission requirements — all free and open to the community.",
+  alternates: { canonical: "https://www.tryskill.me/docs" },
+  openGraph: {
+    url: "https://www.tryskill.me/docs",
+    title: "Docs — How to Use Claude AI Skills | TrySkill",
+    description:
+      "Everything you need to know about using, creating, and submitting Claude AI skills.",
+  },
+};
 
 const SECTIONS = [
   {

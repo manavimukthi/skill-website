@@ -67,6 +67,20 @@ async function checkAuth(): Promise<boolean> {
   }
 }
 
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
+  try {
+    const { getAdminClient } = await import("@/lib/supabase/admin");
+    const supabase = getAdminClient();
+    const { data } = await supabase
+      .from("skills")
+      .select("slug")
+      .eq("published", true);
+    return (data ?? []).map((s) => ({ slug: s.slug as string }));
+  } catch {
+    return [];
+  }
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const skill = await fetchSkill(params.slug);
   if (!skill) return { title: "Skill Not Found" };

@@ -8,31 +8,40 @@ import SkillsGrid from "@/components/SkillsGrid";
 import Footer from "@/components/Footer";
 import { dbSkillToSkill, type Skill } from "@/lib/skills";
 
-function SkillsBrowser() {
+function SkillsBrowser({ initialSkills }: { initialSkills: Skill[] }) {
   const [selected, setSelected] = useState("All");
-  const [skills, setSkills] = useState<Skill[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [skills, setSkills] = useState<Skill[]>(initialSkills);
+  const [loading, setLoading] = useState(false);
   const [skillsPerPage, setSkillsPerPage] = useState(16);
   const [page, setPage] = useState(1);
   const searchParams = useSearchParams();
 
   useEffect(() => {
     async function init() {
-      try {
-        const q = searchParams.get("q")?.trim();
-        if (q && q.length >= 2) {
-          const r = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
-          if (r.ok) {
-            const json = await r.json();
-            if (Array.isArray(json.data)) {
-              setSkills(json.data.map(dbSkillToSkill));
-            }
+      const q = searchParams.get("q")?.trim();
+      if (!q || q.length < 2) {
+        // No search query — initialSkills from the server are already in state.
+        // Still fetch settings for pagination preference.
+        try {
+          const settingsRes = await fetch("/api/admin/settings", { cache: "no-store" });
+          if (settingsRes.ok) {
+            const { data } = await settingsRes.json();
+            if (data?.skillsPerPage) setSkillsPerPage(data.skillsPerPage);
           }
-        } else {
-          const skillsRes = await fetch("/api/skills?limit=500");
-          if (skillsRes.ok) {
-            const { data } = await skillsRes.json();
-            if (Array.isArray(data)) setSkills(data.map(dbSkillToSkill));
+        } catch {
+          // ignore
+        }
+        return;
+      }
+
+      // Search query is present — fetch matching skills from the search API.
+      setLoading(true);
+      try {
+        const r = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+        if (r.ok) {
+          const json = await r.json();
+          if (Array.isArray(json.data)) {
+            setSkills(json.data.map(dbSkillToSkill));
           }
         }
 
@@ -42,7 +51,7 @@ function SkillsBrowser() {
           if (data?.skillsPerPage) setSkillsPerPage(data.skillsPerPage);
         }
       } catch {
-        // Leave the grid empty if unavailable.
+        // Leave the current skill list unchanged on error.
       } finally {
         setLoading(false);
       }
@@ -122,10 +131,10 @@ function SkillsBrowser() {
   );
 }
 
-export default function SkillsClient() {
+export default function SkillsClient({ initialSkills }: { initialSkills: Skill[] }) {
   return (
     <Suspense>
-      <SkillsBrowser />
+      <SkillsBrowser initialSkills={initialSkills} />
     </Suspense>
   );
 }

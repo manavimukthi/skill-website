@@ -47,10 +47,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Supabase not configured — skip dynamic skill pages
   }
 
-  // Blog post pages from local JSON
+  // Blog post pages — try Supabase first, fall back to local JSON
   let blogPages: MetadataRoute.Sitemap = [];
   try {
-    const posts = readDB<BlogPost[]>("blog.json", []);
+    const { readBlog } = await import("@/lib/blog-store");
+    const posts = await readBlog();
     blogPages = posts
       .filter((p) => p.status === "Published")
       .map((post) => ({
@@ -60,7 +61,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.6,
       }));
   } catch {
-    // JSON not found — skip blog pages
+    // Supabase not configured — try local JSON fallback
+    try {
+      const posts = readDB<BlogPost[]>("blog.json", []);
+      blogPages = posts
+        .filter((p) => p.status === "Published")
+        .map((post) => ({
+          url: `${BASE}/blog/${post.slug}`,
+          lastModified: new Date(post.updatedAt),
+          changeFrequency: "monthly" as const,
+          priority: 0.6,
+        }));
+    } catch {
+      // JSON not found — skip blog pages
+    }
   }
 
   return [...staticPages, ...skillPages, ...blogPages];
